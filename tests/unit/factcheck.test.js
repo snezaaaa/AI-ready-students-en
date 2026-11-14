@@ -10,7 +10,7 @@ test('perfect fact-check succeeds at 100%', () => {
   const r = evaluateFactCheck(perfect, ALL);
   assert.equal(r.success, true);
   assert.equal(r.score, 100);
-  assert.match(r.output, /se oslanjam na izvore/i);
+  assert.match(r.output, /rely on sources/i);
 });
 
 test('each claim shows exactly ONE piece of evidence: its reliable source, once found', () => {
@@ -29,7 +29,7 @@ test('a wrong verdict is "wrong" and the machine says the evidence disagrees', (
   assert.equal(r.success, false);
   assert.equal(r.results.c2, 'wrong');
   assert.equal(r.score, 80);
-  assert.match(r.output, /Dokaz kaže suprotno/);
+  assert.match(r.output, /The evidence says the opposite/);
 });
 
 test('a claim cannot be judged before its evidence is found', () => {

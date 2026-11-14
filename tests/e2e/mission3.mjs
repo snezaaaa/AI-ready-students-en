@@ -47,13 +47,13 @@ const pick = async (opt) => { await page.click(`[data-testid=opt-${opt}]`); awai
 await page.goto(BASE);
 await page.waitForSelector('[data-testid=start]', { timeout: 60000 });
 await page.click('[data-testid=select-mission3]');
-check('mission select shows Mission 3', /POKRENI MISIJU 3/.test(await page.textContent('[data-testid=start]')));
+check('mission select shows Mission 3', /START MISSION 3/.test(await page.textContent('[data-testid=start]')));
 
 // ---- intro
 await page.click('[data-testid=start]');
 await wait(3600);
 const ann = await page.textContent('[data-testid=announcement]').catch(() => '');
-check('Mission 3 cinematic announcement', /JOŠ JEDAN PROMPT/.test(ann), JSON.stringify(ann));
+check('Mission 3 cinematic announcement', /ONE LAST PROMPT/.test(ann), JSON.stringify(ann));
 await shot('m3-01-intro');
 await wait(4500); await shot('m3-02-intro-admin');
 await page.keyboard.press('Enter');
@@ -69,13 +69,13 @@ check('energy barrier blocks the corridor before the seals', (await pos(0)).z >=
 // ---- wrong character, wrong answer, right answer
 await useSeal('Digit2', 1, 'privacy');
 let s = await st();
-check('wrong character cannot open the PRIVACY seal', !s.builderOpen && /Ovo može samo Copilot\. Pritisni 3\./.test(s.line), s.line.slice(0, 70));
+check('wrong character cannot open the PRIVACY seal', !s.builderOpen && /Only Copilot can do this\. Press 3\./.test(s.line), s.line.slice(0, 70));
 await useSeal('Digit3', 2, 'privacy');
 check('Copilot opens the PRIVACY dilemma', await page.isVisible('[data-testid=seal-dilemma]'));
 await shot('m3-04-dilemma');
 await pick('p_all');
 s = await st();
-check('irresponsible choice = strike + explanation', s.ms.strikes === 1 && /Javni alati/.test(await page.textContent('[data-testid=seal-result]')));
+check('irresponsible choice = strike + explanation', s.ms.strikes === 1 && /Public tools/.test(await page.textContent('[data-testid=seal-result]')));
 await pick('p_anon');
 check('responsible choice secures the PRIVACY seal', (await st()).inventory.includes('privacy'));
 await shot('m3-05-seal-secured');
@@ -87,7 +87,7 @@ await pick('i_copy');
 await pick('i_reword');
 check('third strike triggers LOCKDOWN', await waitFor((s) => s.ms.lockdown && s.phase === 'cutscene', 5000));
 await wait(1000);
-check('4,000-slide lockdown overlay shown', await page.isVisible('[data-testid=lockdown-overlay]') && /OD 4\.000/.test(await page.textContent('[data-testid=lockdown-overlay]')));
+check('4,000-slide lockdown overlay shown', await page.isVisible('[data-testid=lockdown-overlay]') && /OF 4,000/.test(await page.textContent('[data-testid=lockdown-overlay]')));
 await shot('m3-06-lockdown');
 check('lockdown ends, back to playing', await advanceUntil('playing'));
 s = await st();
@@ -117,7 +117,7 @@ check('no exemption offered after just one zap', !(await page.evaluate(() => win
 await page.evaluate(() => window.__game.useGame.getState().patchMs({ zaps: 3 }));
 await zapAtGate(a);
 await wait(500);
-check('after 4 zaps ARHIVAR offers a skip at the checkpoint', await page.evaluate(() => window.__game.useGame.getState().nearby?.id === 'exemption'));
+check('after 4 zaps THE ARCHIVIST offers a skip at the checkpoint', await page.evaluate(() => window.__game.useGame.getState().nearby?.id === 'exemption'));
 await shot('m3-07a-exemption');
 
 // ---- play the corridor LIVE: real keyboard input (W + Space), real physics and hit detection.
@@ -175,7 +175,7 @@ await shot('m3-08-final-builder');
 await page.click('[data-testid=test-prompt]');
 await page.waitForSelector('.ai-output.fail', { timeout: 6000 });
 await wait(2200);
-check('unsafe rule (names and grades of all students) is rejected with a privacy alert', /UPOZORENJE ZA PRIVATNOST/.test(await page.textContent('[data-testid=ai-output]')));
+check('unsafe rule (names and grades of all students) is rejected with a privacy alert', /PRIVACY ALERT/.test(await page.textContent('[data-testid=ai-output]')));
 await page.click('[data-testid=card-f_guard_good]');
 await page.click('[data-testid=test-prompt]');
 await page.waitForSelector('.ai-output.success', { timeout: 6000 });
@@ -187,16 +187,16 @@ await wait(3000); await shot('m3-11-victory');
 check('finale complete screen', await advanceUntil('complete', 16));
 await wait(600);
 const txt = await page.textContent('[data-testid=complete-screen]');
-check('debrief: 100% + responsible-use lesson + recap of all 3 missions', /100%/.test(txt) && /Odgovorna upotreba AI/.test(txt) && /Misija 1 · Napiši dobro/.test(txt) && /Misija 2 · Provjeri/.test(txt) && /Misija 3 · Koristi odgovorno/.test(txt));
+check('debrief: 100% + responsible-use lesson + recap of all 3 missions', /100%/.test(txt) && /Using AI responsibly/.test(txt) && /Mission 1 · Write it well/.test(txt) && /Mission 2 · Check it/.test(txt) && /Mission 3 · Use it responsibly/.test(txt));
 await page.fill('[data-testid=cert-name]', 'Željka Đurđić-Šćekić');
 const cert = await page.textContent('[data-testid=certificate]');
 check('certificate shows the typed name (with č ć š ž đ)', /Željka Đurđić-Šćekić/.test(cert));
-check('certificate: title, three skills, date', /AI SERTIFIKAT/.test(cert) && /ODGOVORNI AI ISTRAŽIVAČ/.test(cert) && /Pisanje prompta · Provjera činjenica · Odgovorna upotreba AI/.test(cert) && /Datum: \d{1,2}\. [a-z]+ \d{4}\./.test(cert));
-check('certificate is signed by the teacher and school', /Snežana Kerndl, nastavnica informatike/.test(cert) && /JU Srednja ekonomsko-ugostiteljska škola, Bar/.test(cert));
+check('certificate: title, three skills, date', /AI CERTIFICATE/.test(cert) && /RESPONSIBLE AI EXPLORER/.test(cert) && /Prompt writing · Fact-checking · Responsible AI use/.test(cert) && /Date: \d{1,2} [A-Z][a-z]+ \d{4}/.test(cert));
+check('general certificate: no teacher or school name, a blank signature line instead', !/Kerndl/.test(cert) && !/škola|School,/.test(cert) && /Teacher's signature/.test(cert));
 check('the name is not stored anywhere', await page.evaluate(() => !JSON.stringify([{ ...localStorage }, { ...sessionStorage }, document.cookie]).includes('Željka')));
-check('certificate names JA Montenegro as the programme organiser', /Organizator programa:\s*JA Montenegro/.test(await page.textContent('[data-testid=certificate]')));
+check('certificate names JA Montenegro as the programme organiser', /Programme organiser:\s*JA Montenegro/.test(await page.textContent('[data-testid=certificate]')));
 check('no logo on the certificate', await page.evaluate(() => !document.querySelector('[data-testid=certificate] img')));
-check('certificate shows the project credit', /u organizaciji JA Europe i JA Montenegro/.test(await page.textContent('[data-testid=certificate]')));
+check('certificate shows the project credit', /organised by JA Europe and JA Montenegro/.test(await page.textContent('[data-testid=certificate]')));
 check('only an A4 print button is offered', await page.isVisible('[data-testid=print-a4]') && !(await page.$('[data-testid=print-letter]')));
 {
   await page.emulateMedia({ media: 'print' });

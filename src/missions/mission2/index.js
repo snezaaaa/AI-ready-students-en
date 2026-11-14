@@ -1,4 +1,4 @@
-// Mission 2 — KRIZA KOD AUTOMATA, the school hallway (see registry.js for the mission interface)
+// Mission 2 — THE VENDING MACHINE CRISIS, the school hallway (see registry.js for the mission interface)
 import BreakRoom from './BreakRoom.jsx';
 import * as m2 from './logic.js';
 import { FactChecker, CaffeineMeter, NapOverlay } from './ui.jsx';
@@ -6,16 +6,16 @@ import { SOURCES } from './factCheck.js';
 import { SPAWNS, buildColliders, OPEN_SPACES, STARS } from './layout.js';
 
 // HUD chips: [source id, character key that can unlock it, short label]
-const HUD = [['textbook', 1, 'KNJIGA'], ['health', 1, 'SAJT'], ['cctv', 2, 'KAMERA'], ['teacher', 3, 'PROF'], ['label', 4, 'ETIKETA']];
+const HUD = [['textbook', 1, 'BOOK'], ['health', 1, 'WEBSITE'], ['cctv', 2, 'CAMERA'], ['teacher', 3, 'TEACHER'], ['label', 4, 'LABEL']];
 
 export default {
-  id: 'mission2', number: 2, title: 'Kriza kod automata', status: 'available',
-  tagline: 'Školski automat tvrdi 5 stvari i potpuno je siguran. Nađi dokaze i označi: tačno ili halucinacija.',
-  announcement: 'PAŽNJA, UČENICI. AUTOMAT ZA UŽINU JE VAN KONTROLE.',
-  certificate: 'SERTIFIKAT OTKLJUČAN 66%',
-  attemptLabel: 'Pokušaja provjere',
-  ranks: ['MAJSTOR PROVJERE', 'LOVAC NA IZVORE', 'POČETNIK'],
-  extraStats: (s) => `Zaspali na času: ${s.ms.naps || 0} · Sudari sa Usisivač-Botom: ${s.ms.bumps || 0}`,
+  id: 'mission2', number: 2, title: 'The Vending Machine Crisis', status: 'available',
+  tagline: 'The school vending machine makes 5 claims and is completely sure of them. Find the evidence and mark each one: true or hallucination.',
+  announcement: 'ATTENTION, STUDENTS. THE SNACK MACHINE IS OUT OF CONTROL.',
+  certificate: 'CERTIFICATE 66% UNLOCKED',
+  attemptLabel: 'Fact-check attempts',
+  ranks: ['MASTER FACT-CHECKER', 'SOURCE HUNTER', 'BEGINNER'],
+  extraStats: (s) => `Fell asleep in class: ${s.ms.naps || 0} · Vacuum-Bot bumps: ${s.ms.bumps || 0}`,
   startYaw: Math.PI / 2,
   initialState: m2.initialState,
   PuzzleUI: FactChecker,
@@ -42,18 +42,18 @@ export default {
     victory: { center: [0, 1.3, -14.8], radius: 5.2, height: 2.3 },
   },
   lesson: {
-    title: 'Provjera činjenica: halucinacije i izvori',
+    title: 'Fact-checking AI: hallucinations and sources',
     points: [
-      ['HALUCINACIJE', 'AI može da izmisli nešto i kaže to potpuno sigurno („čips light nema masti“). Zvučati sigurno nije isto što i biti u pravu.'],
-      ['PROVJERI IZVOR', 'Pitaj ko je to napisao i šta time dobija. Letak automata o sebi, TikTok bez izvora ili „drug je čuo“ nisu dokaz.'],
-      ['UPOREDI', 'Uporedi tvrdnju sa nezavisnim, pouzdanim izvorima: udžbenik, nastavnik, deklaracija, zvanični sajt, snimak.'],
-      ['AI NIJE UVIJEK U KRIVU', 'Dvije od pet tvrdnji bile su tačne. I tačna tvrdnja traži pouzdan dokaz. Provjeravaj sve, ne samo ono što ti je sumnjivo.'],
+      ['HALLUCINATIONS', 'AI can make something up and say it with total confidence ("light chips have no fat"). Sounding sure is not the same as being right.'],
+      ['CHECK THE SOURCE', 'Ask who wrote it and what they gain. A leaflet the machine wrote about itself, a TikTok with no sources, or "a classmate heard" is not evidence.'],
+      ['COMPARE', 'Compare the claim with independent, reliable sources: a textbook, a teacher, a nutrition label, an official website, footage.'],
+      ['AI IS NOT ALWAYS WRONG', 'Two of the five claims were true. A true claim needs reliable evidence too. Check everything, not only what looks suspicious.'],
     ],
     example: {
-      badLabel: 'Slabo zaključivanje', goodLabel: 'Dobro zaključivanje',
-      bad: '„AI je rekao da čips light nema masti, znači nema.“',
-      good: '„AI je rekao da čips light nema masti. Na deklaraciji piše 22 g masti na 100 g. Znači, tvrdnja je netačna.“',
+      badLabel: 'Weak reasoning', goodLabel: 'Good reasoning',
+      bad: '"The AI said light chips have no fat, so they don\'t."',
+      good: '"The AI said light chips have no fat. The label says 22 g of fat per 100 g. So the claim is false."',
     },
-    extra: 'Savjet: kad koristiš AI za učenje ili referat, za svaku važnu tvrdnju nađi bar jedan nezavisan izvor. Ono što ne možeš da provjeriš, označi ili izbaci.',
+    extra: 'Tip: when you use AI for studying or a school report, find at least one independent source for every important claim. Mark or drop anything you cannot verify.',
   },
 };

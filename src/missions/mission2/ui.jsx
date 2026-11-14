@@ -14,10 +14,10 @@ export function CaffeineMeter() {
   const color = level > 50 ? '#22c55e' : level > 25 ? '#facc15' : '#ef4444';
   return (
     <div className={`caffeine ${low ? 'low' : ''}`} data-testid="caffeine">
-      <span>⚡ ENERGIJA</span>
+      <span>⚡ ENERGY</span>
       <div className="caffeine-bar"><div style={{ width: `${level}%`, background: color }} /></div>
       <b>{level}%</b>
-      {low && <em>SPAVA TI SE… pojedi nešto!</em>}
+      {low && <em>SO SLEEPY… eat something!</em>}
     </div>
   );
 }
@@ -29,15 +29,15 @@ export function NapOverlay() {
   return (
     <div className="nap-overlay" data-testid="nap-overlay">
       <div className="zzz"><span>Z</span><span>z</span><span>z</span></div>
-      <div className="nap-text">ZASPALI STE NA ČASU</div>
+      <div className="nap-text">YOU FELL ASLEEP IN CLASS</div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------- fact-check station
-const VERDICTS = [[true, '✔ TAČNO'], [false, '✖ HALUCINACIJA']];
+const VERDICTS = [[true, '✔ TRUE'], [false, '✖ HALLUCINATION']];
 const NONE = {};
-const STATUS_TEXT = { ok: '✔ tačno', wrong: '✖ dokaz kaže suprotno', missing: '✖ nije odgovoreno' };
+const STATUS_TEXT = { ok: '✔ correct', wrong: '✖ the evidence says the opposite', missing: '✖ not answered' };
 
 /**
  * One claim at a time. Each claim shows ONE piece of evidence (found in the hallway);
@@ -93,13 +93,13 @@ export function FactChecker() {
       <div className="builder factcheck">
         <div className="builder-head">
           <div>
-            <div className="builder-title">PROVJERA ČINJENICA</div>
-            <div className="builder-sub how">Pročitaj dokaz i označi: <b>TAČNO</b> ili <b>HALUCINACIJA</b>. Dokaza: <b>{CLAIMS.filter((x) => evidenceFor(x.id, inventory)).length}/5</b></div>
+            <div className="builder-title">FACT-CHECK STATION</div>
+            <div className="builder-sub how">Read the evidence and mark: <b>TRUE</b> or <b>HALLUCINATION</b>. Evidence found: <b>{CLAIMS.filter((x) => evidenceFor(x.id, inventory)).length}/5</b></div>
           </div>
-          <button className="btn small" onClick={() => useGame.getState().closeBuilder()} data-testid="builder-close">✕ Zatvori (Esc)</button>
+          <button className="btn small" onClick={() => useGame.getState().closeBuilder()} data-testid="builder-close">✕ Close (Esc)</button>
         </div>
 
-        <div className="claim-tabs" role="tablist" aria-label="Tvrdnje">
+        <div className="claim-tabs" role="tablist" aria-label="Claims">
           {CLAIMS.map((cl, i) => {
             const st = showStatus ? result.results[cl.id] : null;
             return (
@@ -113,16 +113,16 @@ export function FactChecker() {
         </div>
 
         <div className={`claim one ${status ? (status === 'ok' ? 'ok' : 'bad') : ''}`} data-testid={`claim-${c.id}`}>
-          <div className="claim-count">Tvrdnja {current + 1} od {CLAIMS.length}{status && <em className="claim-status"> · {STATUS_TEXT[status]}</em>}</div>
-          <div className="claim-text big">SNACK-O-MAT kaže: „{c.text}“</div>
+          <div className="claim-count">Claim {current + 1} of {CLAIMS.length}{status && <em className="claim-status"> · {STATUS_TEXT[status]}</em>}</div>
+          <div className="claim-text big">SNACK-O-MAT says: "{c.text}"</div>
 
           {ev ? (
             <div className="evidence" style={{ '--c': ev.color }} data-testid={`evidence-${c.id}`}>
-              <b>🔎 Dokaz: {ev.short}</b>
-              <span className="says">„{ev.claims[c.id]}“</span>
+              <b>🔎 Evidence: {ev.short}</b>
+              <span className="says">"{ev.claims[c.id]}"</span>
             </div>
           ) : (
-            <div className="source-missing" data-testid={`evidence-missing-${c.id}`}>🔒 Još nemaš dokaz. Potraži u hodniku: <b>{need.short}</b> (treba {ROSTER.find((x) => x.id === need.who).name}).</div>
+            <div className="source-missing" data-testid={`evidence-missing-${c.id}`}>🔒 No evidence yet. Look in the hallway for: <b>{need.short}</b> (needs {ROSTER.find((x) => x.id === need.who).name}).</div>
           )}
 
           <div className="verdicts">
@@ -134,21 +134,21 @@ export function FactChecker() {
           </div>
 
           <div className="claim-nav">
-            <button className="btn small" disabled={current === 0} onClick={() => setCurrent(current - 1)} data-testid="claim-prev">◀ Prethodna</button>
-            {!isLast && <button className={`btn ${isDone(c) ? 'primary pulse' : ''}`} onClick={() => setCurrent(current + 1)} data-testid="claim-next">Sljedeća ▶</button>}
+            <button className="btn small" disabled={current === 0} onClick={() => setCurrent(current - 1)} data-testid="claim-prev">◀ Previous</button>
+            {!isLast && <button className={`btn ${isDone(c) ? 'primary pulse' : ''}`} onClick={() => setCurrent(current + 1)} data-testid="claim-next">Next ▶</button>}
           </div>
         </div>
 
         <div className="builder-foot">
           <button className="btn primary big" onClick={onSubmit} disabled={busy || doneCount < CLAIMS.length} data-testid="submit-factcheck">
-            {busy && !result ? 'PREGLEDAM…' : '⚡ POŠALJI'}
+            {busy && !result ? 'CHECKING…' : '⚡ SUBMIT'}
           </button>
-          <span className="muted">Odgovoreno: {doneCount}/{CLAIMS.length} · Pokušaja: {attempts}</span>
+          <span className="muted">Answered: {doneCount}/{CLAIMS.length} · Attempts: {attempts}</span>
         </div>
 
         {(result || busy) && (
           <div className={`ai-output ${result ? (result.success ? 'success' : 'fail') : ''}`} data-testid="ai-output">
-            <div className="ai-head">{!result ? 'ANALIZIRAM…' : result.success ? `✅ SVE PROVJERENO — TAČNOST ${result.score}%` : `❌ NIJE PROŠLO — TAČNOST ${result.score}%`}</div>
+            <div className="ai-head">{!result ? 'ANALYSING…' : result.success ? `✅ ALL CHECKED — ACCURACY ${result.score}%` : `❌ NOT ACCEPTED — ACCURACY ${result.score}%`}</div>
             <pre>{typed}</pre>
           </div>
         )}

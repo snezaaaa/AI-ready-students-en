@@ -1,5 +1,5 @@
-// Mission 3 — KONAČNI SERTIFIKAT
-// The school archive, guarded by ARHIVAR and its 4,000-slide presentation.
+// Mission 3 — THE FINAL CERTIFICATE
+// The school archive, guarded by THE ARCHIVIST and its 4,000-slide presentation.
 //  1. Hall of Seals: four responsible-AI dilemmas for students, each opened by one character (3 strikes = lockdown).
 //  2. Sensor corridor: blinking gates + low sweeping beams to jump over.
 //  3. Archive core: Claude powers the console; write the FINAL PROMPT (RTCF + guardrails).
@@ -28,10 +28,10 @@ export const initialState = () => ({
 // ---------------------------------------------------------------- seals
 // Dialogue rule for the student edition: one short, plain sentence per interaction.
 const SEAL_WIN = {
-  privacy: { who: 'boss', text: 'Lične podatke ne dijelimo. Ni svoje ni tuđe.' },
-  integrity: { who: 'mastermind', text: 'AI pomaže, ali rad je tvoj.' },
-  bias: { who: 'joker', text: 'Stereotipe primijetimo i ispravimo.' },
-  oversight: { who: 'commentator', text: 'Ko predaje, taj i odgovara. Zato provjeri.' },
+  privacy: { who: 'boss', text: 'We do not share personal data. Ours or anyone else\'s.' },
+  integrity: { who: 'mastermind', text: 'AI helps, but the work is yours.' },
+  bias: { who: 'joker', text: 'We spot stereotypes and fix them.' },
+  oversight: { who: 'commentator', text: 'Whoever hands it in is responsible. So check it.' },
 };
 
 function openModal(modal, extra = {}) {
@@ -49,9 +49,9 @@ function sealInteractable(seal) {
   const p = SEAL_POS[seal.id];
   return {
     id: `seal_${seal.id}`, x: p.x + (p.x < 0 ? 1.4 : -1.4), z: p.z, r: 1.8,
-    label: (s) => (s.inventory.includes(seal.id) ? `Pečat ${seal.label} je osvojen` : `Otključaj pečat ${seal.label}`),
+    label: (s) => (s.inventory.includes(seal.id) ? `${seal.label} seal secured` : `Unlock the ${seal.label} seal`),
     use: () => {
-      if (G().inventory.includes(seal.id)) return say({ who: 'narrator', text: 'Ovaj pečat je već osvojen.' }, { interrupt: true });
+      if (G().inventory.includes(seal.id)) return say({ who: 'narrator', text: 'This seal is already secured.' }, { interrupt: true });
       if (activeId() !== seal.who) {
         sfx.deny();
         emote(G().active, 'shrug', 1.6);
@@ -72,9 +72,9 @@ export function chooseSealOption(sealId, optionId) {
     G().collect(sealId);
     sfx.pickup();
     emote(G().active, 'cheer', 2.5);
-    G().showToast({ title: `PEČAT OSVOJEN: ${seal.label}`, body: `Otključano pravilo: „${seal.clause}“`, tip: r.why, color: seal.color });
+    G().showToast({ title: `SEAL SECURED: ${seal.label}`, body: `Rule unlocked: "${seal.clause}"`, tip: r.why, color: seal.color });
     const all = SEALS.every((s) => G().inventory.includes(s.id));
-    say(all ? { who: 'admin', text: 'Sva 4 pečata. Barijera je spuštena: slijedi hodnik sa senzorima.' } : SEAL_WIN[sealId], { interrupt: true });
+    say(all ? { who: 'admin', text: 'All 4 seals. The barrier is down: next is the sensor corridor.' } : SEAL_WIN[sealId], { interrupt: true });
     return r;
   }
   // wrong answer: strike
@@ -83,7 +83,7 @@ export function chooseSealOption(sealId, optionId) {
   emote(G().active, 'facepalm', 2);
   const strikes = ms().strikes + 1;
   G().patchMs((m) => ({ strikes, wrongPicks: { ...m.wrongPicks, [sealId]: [...(m.wrongPicks[sealId] || []), optionId] } }));
-  say({ who: 'admin', text: `Greška ${strikes}/${STRIKES_FOR_LOCKDOWN}. Pročitaj objašnjenje.` }, { interrupt: true });
+  say({ who: 'admin', text: `Strike ${strikes}/${STRIKES_FOR_LOCKDOWN}. Read the explanation.` }, { interrupt: true });
   if (strikes >= STRIKES_FOR_LOCKDOWN) setTimeout(startLockdown, 1800);
   return r;
 }
@@ -98,8 +98,8 @@ function startLockdown() {
   sfx.siren(3);
   ROSTER.forEach((_, i) => emote(i, 'facepalm', 9));
   say([
-    { who: 'system', text: 'TRI GREŠKE. SLIJEDI 4.000 SLAJDOVA.', duration: 3.4 },
-    { who: 'narrator', text: 'Gotovo. Greške su obrisane. Čitaj pažljivije.', duration: 3.4,
+    { who: 'system', text: 'THREE STRIKES. HERE COME 4,000 SLIDES.', duration: 3.4 },
+    { who: 'narrator', text: 'Done. The strikes are cleared. Read more carefully.', duration: 3.4,
       then: () => {
         G().patchMs({ lockdown: false, strikes: 0 });
         world.cine = { mode: null, t: 0 };
@@ -125,7 +125,7 @@ function updateLasers(st) {
   if (c.z < ms().furthestZ - 0.2) G().patchMs({ furthestZ: c.z });
   if (!ms().corridorHint) {
     G().patchMs({ corridorHint: true });
-    say({ who: 'admin', text: 'ČEKAJ: stani dok se kapija ne ugasi. SKOČI: pritisni SPACE.' }, { interrupt: true });
+    say({ who: 'admin', text: 'WAIT: stop until the gate goes dark. JUMP: press SPACE.' }, { interrupt: true });
   }
   if (world.time - ms().lastZapAt < 0.8) return;
   const hitIdx = LASERS.findIndex((l, i) => laserHits(l, laserStates[i], c));
@@ -142,8 +142,8 @@ function zap(c, st) {
   emote(st.active, 'shrug', 1.2);
   const zaps = ms().zaps + 1;
   G().patchMs({ zaps, lastZapAt: world.time });
-  if (zaps === EXEMPTION_AFTER) say({ who: 'admin', text: 'Četiri pokušaja. Pritisni E ovdje ako želiš da preskočiš hodnik.' }, { interrupt: true });
-  else if (!G().dialogue.current) say({ who: 'admin', text: 'Senzor! Nazad na kontrolnu tačku.', duration: 2.2 });
+  if (zaps === EXEMPTION_AFTER) say({ who: 'admin', text: 'Four tries. Press E here if you want to skip the corridor.' }, { interrupt: true });
+  else if (!G().dialogue.current) say({ who: 'admin', text: 'Sensor! Back to the checkpoint.', duration: 2.2 });
 }
 
 // ---------------------------------------------------------------- final prompt
@@ -156,7 +156,7 @@ export function testFinalPrompt() {
   world.alarm = 1;
   emote(st.active, 'facepalm', 2);
   const first = result.wrong.includes('guardrails') ? 'guardrails' : result.wrong[0] || result.missing[0];
-  say({ who: 'admin', text: `Odbijeno (${result.score}%). ${HINTS[first]}` }, { interrupt: true });
+  say({ who: 'admin', text: `Rejected (${result.score}%). ${HINTS[first]}` }, { interrupt: true });
   return result;
 }
 
@@ -168,7 +168,7 @@ export function startVaultSequence() {
   world.cine = { mode: 'vault', t: 0 };
   st.setPhase('cutscene');
   ROSTER.forEach((_, i) => emote(i, 'cheer', 8));
-  say({ who: 'admin', text: 'Ovo je dobar i odgovoran prompt. Otvaram arhivu!', then: startVictory }, { interrupt: true });
+  say({ who: 'admin', text: 'This is a good, responsible prompt. Opening the archive!', then: startVictory }, { interrupt: true });
 }
 
 export function startVictory() {
@@ -180,7 +180,7 @@ export function startVictory() {
   st.setPhase('victory');
   sfx.success();
   setTimeout(() => sfx.success(), 1600);
-  st.say({ who: 'system', text: 'SERTIFIKAT: 100%. ČESTITAMO!', then: () => G().setPhase('complete') }, { interrupt: true });
+  st.say({ who: 'system', text: 'CERTIFICATE: 100%. CONGRATULATIONS!', then: () => G().setPhase('complete') }, { interrupt: true });
 }
 
 // ---------------------------------------------------------------- interactables
@@ -188,26 +188,26 @@ export const INTERACTABLES = [
   ...SEALS.map(sealInteractable),
   {
     id: 'exemption', x: 0, z: -0.9, r: 1.3,
-    label: (s) => (s.ms.zaps >= EXEMPTION_AFTER && !s.ms.teamInCore ? 'Preskoči hodnik sa senzorima' : null),
+    label: (s) => (s.ms.zaps >= EXEMPTION_AFTER && !s.ms.teamInCore ? 'Skip the sensor corridor' : null),
     use: () => {
       sfx.success();
       const c = world.chars[G().active];
       Object.assign(c, { x: 0, z: CORE_ENTRY_Z - 0.6, vx: 0, vz: 0, y: 0, vy: 0, grounded: true });
-      say({ who: 'admin', text: 'Hodnik preskočen.' }, { interrupt: true });
+      say({ who: 'admin', text: 'Corridor skipped.' }, { interrupt: true });
     },
   },
   {
     id: 'barrier', x: 0, z: 1.3, r: 1.8,
-    label: (s) => (hasAllSeals(s.inventory) ? null : 'Dodirni barijeru'),
+    label: (s) => (hasAllSeals(s.inventory) ? null : 'Touch the barrier'),
     use: () => {
       sfx.deny();
       const n = SEALS.filter((s) => G().inventory.includes(s.id)).length;
-      say({ who: 'admin', text: `Barijera. Prvo osvoji pečate: ${n}/4.` }, { interrupt: true });
+      say({ who: 'admin', text: `Barrier. Secure the seals first: ${n}/4.` }, { interrupt: true });
     },
   },
   {
     id: 'console', x: PROPS.console.x, z: PROPS.console.z + 1.2, r: 1.8,
-    label: (s) => (s.doorOpen ? null : !s.ms.consoleOn ? 'Uključi konzolu za KONAČNI PROMPT' : 'Napiši KONAČNI PROMPT'),
+    label: (s) => (s.doorOpen ? null : !s.ms.consoleOn ? 'Power up the FINAL PROMPT console' : 'Write the FINAL PROMPT'),
     use: () => {
       if (!ms().consoleOn) {
         if (activeId() !== 'commentator') {
@@ -217,7 +217,7 @@ export const INTERACTABLES = [
         sfx.success();
         emote(G().active, 'cheer', 2.5);
         G().patchMs({ consoleOn: true });
-        return say({ who: 'admin', text: 'Konzola radi. Napravi plakat sa pravilima za AI u odjeljenju.' }, { interrupt: true });
+        return say({ who: 'admin', text: 'The console is on. Make a poster with AI rules for the class.' }, { interrupt: true });
       }
       sfx.interact();
       openModal('final');
@@ -225,8 +225,8 @@ export const INTERACTABLES = [
   },
   {
     id: 'vault', x: PROPS.vault.x, z: PROPS.vault.z + 1.6, r: 1.8,
-    label: (s) => (s.doorOpen ? null : 'Pogledaj vrata arhive'),
-    use: () => { sfx.deny(); say({ who: 'admin', text: 'Arhivu otvara samo dobar konačni prompt.' }, { interrupt: true }); },
+    label: (s) => (s.doorOpen ? null : 'Look at the archive door'),
+    use: () => { sfx.deny(); say({ who: 'admin', text: 'Only a good final prompt opens the archive.' }, { interrupt: true }); },
   },
 ];
 
@@ -236,8 +236,8 @@ export function intro() {
   world.alarm = 1;
   sfx.siren(3);
   st.say([
-    { who: 'system', mood: 'shock', text: 'PAŽNJA, UČENICI. ZA KONAČNI SERTIFIKAT TREBA... JOŠ JEDAN PROMPT.', duration: 4.2 },
-    { who: 'admin', text: 'Sertifikat je iza 4 pečata, hodnika sa senzorima i jednog prompta. Tri greške = 4.000 slajdova.', duration: 6, then: () => endIntro() },
+    { who: 'system', mood: 'shock', text: 'ATTENTION, STUDENTS. THE FINAL CERTIFICATE NEEDS... ONE LAST PROMPT.', duration: 4.2 },
+    { who: 'admin', text: 'The certificate is behind 4 seals, a sensor corridor and one prompt. Three strikes = 4,000 slides.', duration: 6, then: () => endIntro() },
   ], { interrupt: true });
 }
 
@@ -249,17 +249,17 @@ export function endIntro() {
   st.setPhase('playing');
   if (!st.startedAt) useGame.setState({ startedAt: performance.now() });
   setTimeout(() => G().phase === 'playing' && !G().dialogue.current && say({
-    who: 'admin', text: 'Svaki pečat otvara drugi lik (1–4). Brojevi su gore lijevo.',
+    who: 'admin', text: 'Each seal needs a different character (1–4). The numbers are at the top left.',
   }), 600);
 }
 
 export function objective(s) {
-  if (s.doorOpen) return 'Uzmi svoj sertifikat!';
+  if (s.doorOpen) return 'Collect your certificate!';
   const n = SEALS.filter((x) => s.inventory.includes(x.id)).length;
-  if (n < SEALS.length) return `Osvoji 4 pečata odgovorne upotrebe AI (${n}/4)`;
-  if (!s.ms.teamInCore) return 'Pređi Hodnik sa senzorima: stani kod linije ČEKAJ dok se kapija ne ugasi, pritisni SPACE tik prije crvene zone SKOČI';
-  if (!s.ms.consoleOn) return 'Uključi konzolu za Konačni prompt (treba Claude)';
-  return 'Napiši KONAČNI PROMPT na konzoli';
+  if (n < SEALS.length) return `Secure the 4 seals of responsible AI use (${n}/4)`;
+  if (!s.ms.teamInCore) return 'Cross the sensor corridor: stop at the WAIT line until the gate goes dark, press SPACE just before the red JUMP zone';
+  if (!s.ms.consoleOn) return 'Power up the Final Prompt console (needs Claude)';
+  return 'Write the FINAL PROMPT at the console';
 }
 
 export function update(dt, st) {
@@ -278,7 +278,7 @@ export function update(dt, st) {
     });
     G().patchMs({ teamInCore: true });
     sfx.pickup();
-    say({ who: 'admin', text: 'Stigli ste. Konzolu uključuje Claude (4).' }, { interrupt: true });
+    say({ who: 'admin', text: 'You made it. Claude (4) powers up the console.' }, { interrupt: true });
   }
 }
 

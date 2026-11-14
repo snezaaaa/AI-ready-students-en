@@ -50,16 +50,16 @@ function useTextures() {
     });
     return {
       marble, grid,
-      banners: [banner('PRIVATNOST', '#0c4a6e'), banner('INTEGRITET', '#4c1d95'), banner('PRAVIČNOST', '#7c2d12'), banner('ODGOVORNOST', '#7f1d1d')],
-      corridorSign: sign(['HODNIK SA SENZORIMA', 'preskoči niske zrake · sačekaj kapije'], '#450a0a', '#fecaca'),
-      consoleSign: sign(['KONAČNI PROMPT', 'konzola · potreban jasan glas'], '#3b0764', '#f5d0fe'),
-      trophy: sign(['UČENIK GENERACIJE', 'PROMPTOTRON 3000 · 12 godina zaredom'], '#78350f', '#fde68a'),
-      brewJr: sign(['SNACK-O-MAT Jr.', 'sada sa izvorima'], '#14532d', '#bbf7d0'),
+      banners: [banner('PRIVACY', '#0c4a6e'), banner('INTEGRITY', '#4c1d95'), banner('FAIRNESS', '#7c2d12'), banner('RESPONSIBLE', '#7f1d1d')],
+      corridorSign: sign(['SENSOR CORRIDOR', 'jump the low beams · wait at the gates'], '#450a0a', '#fecaca'),
+      consoleSign: sign(['THE FINAL PROMPT', 'console · needs a clear voice'], '#3b0764', '#f5d0fe'),
+      trophy: sign(['STUDENT OF THE YEAR', 'PROMPTOTRON 3000 · 12 years running'], '#78350f', '#fde68a'),
+      brewJr: sign(['SNACK-O-MAT Jr.', 'now with sources'], '#14532d', '#bbf7d0'),
     };
   }, []);
 }
 
-// ---------------------------------------------------------------- the Archivist's (ARHIVAR) screen
+// ---------------------------------------------------------------- the Archivist's screen
 function AdminScreen() {
   const strikes = useGame((s) => s.ms.strikes ?? 0);
   const lockdown = useGame((s) => s.ms.lockdown);
@@ -85,15 +85,15 @@ function AdminScreen() {
     g.stroke();
     // slide panel
     g.fillStyle = '#f8fafc'; g.fillRect(560, 70, 410, 300); g.fillStyle = '#7c3aed'; g.fillRect(560, 70, 410, 50);
-    g.fillStyle = '#fff'; g.font = 'bold 24px system-ui'; g.fillText(lockdown ? 'VANREDNI ČAS' : doorOpen ? 'HVALA' : 'PRAVILA ARHIVE', 580, 104);
+    g.fillStyle = '#fff'; g.font = 'bold 24px system-ui'; g.fillText(lockdown ? 'EXTRA LESSON' : doorOpen ? 'THANK YOU' : 'ARCHIVE RULES', 580, 104);
     g.fillStyle = '#1f2937'; g.font = 'bold 22px system-ui';
-    const bullets = doorOpen ? ['• Napisali ste odgovoran prompt', '• Ja sam... ponosan?', '• Slajdovi 2–4.000 otkazani'] : ['• Čuvaj lične podatke', '• AI pomaže, rad je tvoj', '• Pazi na stereotipe', '• Provjeri, pa predaj'];
+    const bullets = doorOpen ? ['• You wrote a responsible prompt', '• I am... proud?', '• Slides 2–4,000 cancelled'] : ['• Protect personal data', '• AI helps, the work is yours', '• Watch for stereotypes', '• Check, then hand in'];
     bullets.forEach((b, i) => g.fillText(b, 580, 165 + i * 46));
     g.textAlign = 'center'; g.fillStyle = col; g.font = `34px ${FONT}`;
-    g.fillText(doorOpen ? 'ARHIVA OTVORENA' : `SLAJD ${slide} OD 4.000`, 765, 430);
+    g.fillText(doorOpen ? 'ARCHIVE OPEN' : `SLIDE ${slide} OF 4,000`, 765, 430);
     g.font = 'bold 26px system-ui'; g.fillStyle = '#fff';
-    g.fillText(doorOpen ? 'Sertifikat je vaš' : `Pečati ${seals}/4 · Greške ${strikes}/3`, 765, 475);
-    g.fillText('ARHIVAR', 300, 470);
+    g.fillText(doorOpen ? 'The certificate is yours' : `Seals ${seals}/4 · Strikes ${strikes}/3`, 765, 475);
+    g.fillText('THE ARCHIVIST', 300, 470);
   }, [strikes, lockdown, doorOpen, seals, slide]);
   return (
     <group position={[0, 0, HALL.minZ + 0.06]}>
@@ -205,8 +205,8 @@ function Certificates() {
   });
   const tex = useMemo(() => makeCanvasTexture(256, 180, (g, w, h) => {
     g.fillStyle = '#fef3c7'; g.fillRect(0, 0, w, h); g.strokeStyle = '#b45309'; g.lineWidth = 8; g.strokeRect(8, 8, w - 16, h - 16);
-    g.fillStyle = '#78350f'; g.textAlign = 'center'; g.font = `22px ${FONT}`; g.fillText('AI SERTIFIKAT', w / 2, 60);
-    g.font = 'bold 14px system-ui'; g.fillText('ODGOVORNI AI ISTRAŽIVAČ', w / 2, 90); g.fillStyle = '#dc2626'; g.beginPath(); g.arc(w / 2, 130, 20, 0, 7); g.fill();
+    g.fillStyle = '#78350f'; g.textAlign = 'center'; g.font = `22px ${FONT}`; g.fillText('AI CERTIFICATE', w / 2, 60);
+    g.font = 'bold 14px system-ui'; g.fillText('RESPONSIBLE AI EXPLORER', w / 2, 90); g.fillStyle = '#dc2626'; g.beginPath(); g.arc(w / 2, 130, 20, 0, 7); g.fill();
   }), []);
   return ROSTER.map((_, i) => (
     <mesh key={i} ref={(el) => (refs.current[i] = el)} position={[(i - 1.5) * 0.5, 2.8, CORE.minZ - 0.3]} visible={false}>
@@ -371,11 +371,11 @@ function FloorZones() {
     jump: makeCanvasTexture(256, 128, (g, w, h) => {
       g.fillStyle = 'rgba(220,38,38,0.85)'; g.fillRect(0, 0, w, h);
       g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = 14; for (let x = -h; x < w; x += 40) { g.beginPath(); g.moveTo(x, h); g.lineTo(x + h, 0); g.stroke(); }
-      g.fillStyle = '#fff'; g.font = `58px ${FONT}`; g.textAlign = 'center'; g.fillText('SKOČI', w / 2, 86);
+      g.fillStyle = '#fff'; g.font = `58px ${FONT}`; g.textAlign = 'center'; g.fillText('JUMP', w / 2, 86);
     }),
     wait: makeCanvasTexture(256, 64, (g, w, h) => {
       g.fillStyle = 'rgba(245,158,11,0.9)'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#111'; g.font = `40px ${FONT}`; g.textAlign = 'center'; g.fillText('ČEKAJ', w / 2, 46);
+      g.fillStyle = '#111'; g.font = `40px ${FONT}`; g.textAlign = 'center'; g.fillText('WAIT', w / 2, 46);
     }),
   }), []);
   return LASERS.map((l) => {

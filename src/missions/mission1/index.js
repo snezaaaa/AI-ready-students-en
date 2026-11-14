@@ -4,15 +4,15 @@ import PromptBuilder from './PromptBuilder.jsx';
 import * as m1 from './logic.js';
 import { SPAWNS, buildColliders, OPEN_SPACES, STARS } from './layout.js';
 
-const COMPONENTS = [['role', 'ULOGA', '#f472b6'], ['task', 'ZADATAK', '#60a5fa'], ['context', 'KONTEKST', '#34d399'], ['format', 'FORMAT', '#fbbf24']];
+const COMPONENTS = [['role', 'ROLE', '#f472b6'], ['task', 'TASK', '#60a5fa'], ['context', 'CONTEXT', '#34d399'], ['format', 'FORMAT', '#fbbf24']];
 
 export default {
-  id: 'mission1', number: 1, title: 'Nemogući prompt', status: 'available',
-  tagline: 'Učionica je zaključana. Skupi Ulogu, Zadatak, Kontekst i Format. Složi savršen prompt. Izađi.',
-  announcement: 'PAŽNJA, UČENICI. VAŠ AI SERTIFIKAT JE ZAKLJUČAN.',
-  certificate: 'SERTIFIKAT OTKLJUČAN 33%',
-  attemptLabel: 'Pokušaja sa promptom',
-  ranks: ['MAJSTOR PROMPTA', 'DOBAR PROMPTER', 'POČETNIK'],
+  id: 'mission1', number: 1, title: 'The Impossible Prompt', status: 'available',
+  tagline: 'The classroom is locked. Collect Role, Task, Context and Format. Build the perfect prompt. Get out.',
+  announcement: 'ATTENTION, STUDENTS. YOUR AI CERTIFICATE HAS BEEN LOCKED.',
+  certificate: 'CERTIFICATE 33% UNLOCKED',
+  attemptLabel: 'Prompt attempts',
+  ranks: ['PROMPT MASTER', 'GOOD PROMPTER', 'BEGINNER'],
   startYaw: Math.PI / 2,
   PuzzleUI: PromptBuilder,
   hudItems: (s) => COMPONENTS.map(([id, label, color]) => ({ id, label, color, got: s.inventory.includes(id) })),
@@ -35,18 +35,18 @@ export default {
     victory: { center: [0, 1.3, -15.0], radius: 5.2, height: 2.3 },
   },
   lesson: {
-    title: 'Dobar prompt u 4 sastojka',
+    title: 'A good prompt in 4 ingredients',
     points: [
-      ['ULOGA', 'Reci AI-ju ko treba da bude. „Ti si strpljiv tutor iz biologije“ daje bolji odgovor nego ništa.'],
-      ['ZADATAK', 'Jedna jasna stvar. „Napravi plan učenja za kontrolni iz fotosinteze“ pobjeđuje „uradi nešto sa biljkama“.'],
-      ['KONTEKST', 'Ko si ti i kakva je situacija: razred, koliko imaš vremena, šta ti ne ide. Bez toga AI nagađa.'],
-      ['FORMAT', 'Reci kako odgovor treba da izgleda: tabela, lista, broj riječi. Tako ga možeš odmah koristiti.'],
+      ['ROLE', 'Tell the AI who to be. "You are a patient biology tutor" gets a better answer than nothing.'],
+      ['TASK', 'One clear thing. "Make me a study plan for my photosynthesis test" beats "do something with plants".'],
+      ['CONTEXT', 'Who you are and what your situation is: your year, how much time you have, what you find hard. Without it the AI guesses.'],
+      ['FORMAT', 'Say what the answer should look like: a table, a list, a word limit. Then you can use it straight away.'],
     ],
     example: {
-      badLabel: 'Slab prompt', goodLabel: 'Jak prompt',
-      bad: '„Objasni mi biljke.“',
-      good: '„Ti si strpljiv tutor iz biologije koji objašnjava srednjoškolcima. Napravi mi plan učenja za kontrolni iz fotosinteze. Ja sam učenik 1. razreda gimnazije, kontrolni je za 3 dana, imam 30 min dnevno i slabije razumijem hemijski dio. Daj tabelu: Dan, Šta učim, Kako se provjerim.“',
+      badLabel: 'Weak prompt', goodLabel: 'Strong prompt',
+      bad: '"Explain plants to me."',
+      good: '"You are a patient biology tutor who explains things to high-school students. Make me a study plan for my photosynthesis test. I am in my first year of high school, the test is in 3 days, I have 30 minutes a day and I struggle with the chemistry part. Give me a table: Day, What I study, How I check myself."',
     },
-    extra: 'Savjet: prvi odgovor je samo nacrt. Traži doradu („objasni 2. dan jednostavnije“) i uvijek provjeri činjenice prije nego što nešto naučiš napamet ili predaš.',
+    extra: 'Tip: the first answer is only a draft. Ask for changes ("explain day 2 more simply") and always check the facts before you learn something by heart or hand it in.',
   },
 };

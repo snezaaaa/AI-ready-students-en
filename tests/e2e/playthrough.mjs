@@ -28,10 +28,10 @@ const waitPhase = async (p, timeout = 30000) => { const t0 = Date.now(); while (
 
 await page.goto(BASE);
 await page.waitForSelector('[data-testid=start]', { timeout: 60000 });
-check('title screen shows the project credit', /u organizaciji JA Europe i JA Montenegro/.test(await page.textContent('[data-testid=project-credit]').catch(() => '')));
-check('page title is the student edition', /AI ESCAPE: Zaključani sertifikat/.test(await page.title()));
+check('title screen shows the project credit', /organised by JA Europe and JA Montenegro/.test(await page.textContent('[data-testid=project-credit]').catch(() => '')));
+check('page title is the English edition', /AI ESCAPE: The Locked Certificate/.test(await page.title()));
 const titleTxt = await page.textContent('.screen.title');
-check('title screen: four characters, keys 1-4', (await page.$$('.lineup-card')).length === 4 && ['GPT', 'Gemi', 'Copilot', 'Claude'].every((n) => titleTxt.includes(n)) && /promjena lika/.test(titleTxt));
+check('title screen: four characters, keys 1-4', (await page.$$('.lineup-card')).length === 4 && ['GPT', 'Gemi', 'Copilot', 'Claude'].every((n) => titleTxt.includes(n)) && /switch character/.test(titleTxt));
 check('loading screen -> title screen', true);
 await wait(800); await shot('01-title');
 
@@ -39,7 +39,7 @@ await wait(800); await shot('01-title');
 await page.click('[data-testid=start]');
 await wait(2600);
 const ann = await page.textContent('[data-testid=announcement]').catch(() => '');
-check('cinematic announcement shows', /PAŽNJA, UČENICI/.test(ann), JSON.stringify(ann));
+check('cinematic announcement shows', /ATTENTION, STUDENTS/.test(ann), JSON.stringify(ann));
 await shot('02-intro-announcement');
 await wait(7000); await shot('03-intro-shot');
 await page.keyboard.press('Enter');  // skip
@@ -91,7 +91,7 @@ await shot('05-interact-prompt');
 await page.keyboard.press('KeyE');
 await wait(400);
 let s = await st();
-check('wrong character cannot solve the riddle: one short line that names who can', s.inventory.length === 0 && /Ovo može samo GPT\. Pritisni 1\./.test(s.line), s.line.slice(0, 60));
+check('wrong character cannot solve the riddle: one short line that names who can', s.inventory.length === 0 && /Only GPT can do this\. Press 1\./.test(s.line), s.line.slice(0, 60));
 
 const plan = [['Digit1', 0, 'whiteboard', 'role'], ['Digit2', 1, 'printer', 'task'], ['Digit3', 2, 'vending', 'format'], ['Digit2', 1, 'cabinet', 'context']];
 for (const [key, idx, obj, slot] of plan) {
@@ -141,7 +141,7 @@ await page.click('[data-testid=test-prompt]');
 await page.waitForSelector('.ai-output.success', { timeout: 5000 });
 await wait(2000); await shot('10-prompt-success');
 const out1 = await page.evaluate(() => window.__game.useGame.getState().lastResult?.output || '');
-check('success output is a 3-day study plan table', /PLAN UČENJA/.test(out1) && /Kako se provjerim/.test(out1) && /\| 3 /.test(out1));
+check('success output is a 3-day study plan table', /STUDY PLAN/.test(out1) && /How I check myself/.test(out1) && /\| 3 /.test(out1));
 check('good prompt accepted -> door cutscene', await waitPhase('cutscene', 8000));
 await wait(2500); await shot('11-door-cutscene');
 check('door is open', (await st()).doorOpen);
@@ -158,8 +158,8 @@ for (let i = 0; i < 8 && (await st()).phase === 'victory'; i++) { await page.key
 check('mission complete screen with lesson', await waitPhase('complete', 10000));
 await wait(600); await shot('13-complete');
 const dtxt = await page.textContent('[data-testid=complete-screen]');
-check('debrief is in Montenegrin: 33% + the four ingredients', /33%/.test(dtxt) && /MISIJA 1 ZAVRŠENA/.test(dtxt) && /ULOGA/.test(dtxt) && /prvi odgovor je samo nacrt/.test(dtxt) && /Zvjezdice: \d+\/10/.test(dtxt));
-check('debrief offers "Nastavi na Misiju 2"', /Nastavi na Misiju 2/.test(await page.textContent('[data-testid=next-mission]').catch(() => '')));
+check('debrief: 33% + the four ingredients', /33%/.test(dtxt) && /MISSION 1 COMPLETE/.test(dtxt) && /ROLE/.test(dtxt) && /the first answer is only a draft/.test(dtxt) && /Stars: \d+\/10/.test(dtxt));
+check('debrief offers "Continue to Mission 2"', /Continue to Mission 2/.test(await page.textContent('[data-testid=next-mission]').catch(() => '')));
 
 // ---- responsive: small viewport loading/title
 const mobile = await browser.newPage({ viewport: { width: 390, height: 780 } });

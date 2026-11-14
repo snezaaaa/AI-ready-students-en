@@ -19,7 +19,7 @@ export default function UI() {
       {phase === 'title' && <TitleScreen />}
       {(phase === 'intro' || phase === 'cutscene' || phase === 'victory') && <Letterbox />}
       {phase === 'intro' && <IntroOverlay text={mission.announcement} />}
-      {phase === 'victory' && <div className="victory-banner">MISIJA {mission.number} ZAVRŠENA</div>}
+      {phase === 'victory' && <div className="victory-banner">MISSION {mission.number} COMPLETE</div>}
       {Overlay && phase !== 'title' && phase !== 'loading' && <Overlay />}
       {(phase === 'playing' || phase === 'cutscene') && <HUD />}
       {phase !== 'title' && phase !== 'loading' && <Subtitles />}
@@ -75,7 +75,7 @@ function Subtitles() {
         </div>
       )}
       <div className="line">{shown}<span className="caret">▌</span></div>
-      <div className="skip-hint">klik / Enter ▸</div>
+      <div className="skip-hint">click / Enter ▸</div>
     </div>
   );
 }
@@ -84,7 +84,7 @@ function Subtitles() {
 function LoadingScreen() {
   const [p, setP] = useState(5);
   useEffect(() => { const id = setInterval(() => setP((x) => Math.min(95, x + (100 - x) * 0.08)), 80); return () => clearInterval(id); }, []);
-  const tips = ['Učitavanje…', 'Zaključavamo sertifikat…', 'Krijemo djelove prompta…', 'Skoro gotovo…'];
+  const tips = ['Loading…', 'Locking the certificate…', 'Hiding the prompt parts…', 'Almost there…'];
   return (
     <div className="screen loading">
       <Logo small />
@@ -98,7 +98,7 @@ function Logo({ small }) {
   return (
     <div className={`logo ${small ? 'small' : ''}`}>
       <div className="logo-top">AI <span>ESCAPE</span></div>
-      <div className="logo-main">ZAKLJUČANI SERTIFIKAT</div>
+      <div className="logo-main">THE LOCKED CERTIFICATE</div>
     </div>
   );
 }
@@ -109,7 +109,7 @@ function TitleScreen() {
   return (
     <div className="screen title">
       <Logo />
-      <p className="pitch">Škola je zaključana, a sa njom i tvoj AI sertifikat.<br />Tri misije: napiši dobar prompt, provjeri činjenice, koristi AI odgovorno.</p>
+      <p className="pitch">The school is locked, and so is your AI certificate.<br />Three missions: write a good prompt, check the facts, use AI responsibly.</p>
       <div className="lineup">
         {ROSTER.map((c, i) => (
           <div key={c.id} className="lineup-card" style={{ '--c': c.color }}>
@@ -122,10 +122,10 @@ function TitleScreen() {
         ))}
       </div>
       <div className="title-buttons">
-        <button className="btn primary" data-testid="start" onClick={() => startMission()}>▶ POKRENI MISIJU {selected.number}</button>
-        <button className="btn" onClick={() => startMission({ skipIntro: true })}>Preskoči uvod</button>
+        <button className="btn primary" data-testid="start" onClick={() => startMission()}>▶ START MISSION {selected.number}</button>
+        <button className="btn" onClick={() => startMission({ skipIntro: true })}>Skip intro</button>
       </div>
-      <div className="missions-row" role="radiogroup" aria-label="Izaberi misiju">
+      <div className="missions-row" role="radiogroup" aria-label="Choose a mission">
         {MISSIONS.map((m) => (
           <button
             key={m.id}
@@ -136,7 +136,7 @@ function TitleScreen() {
             className={`mission-pill ${m.status} ${m.id === missionId ? 'selected' : ''}`}
             onClick={() => useGame.setState({ missionId: m.id })}
           >
-            M{m.number}: {m.title} {m.status !== 'available' && <em>uskoro</em>}
+            M{m.number}: {m.title} {m.status !== 'available' && <em>coming soon</em>}
           </button>
         ))}
       </div>
@@ -150,13 +150,13 @@ function TitleScreen() {
 function Controls() {
   return (
     <div className="controls">
-      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> kretanje</span>
-      <span><kbd>Shift</kbd> trčanje</span>
-      <span><kbd>Miš</kbd> kamera</span>
-      <span><kbd>E</kbd> akcija</span>
-      <span><kbd>1</kbd>–<kbd>4</kbd> promjena lika</span>
-      <span><kbd>Space</kbd> skok (2× = dupli skok)</span>
-      <span><kbd>Esc</kbd> pauza</span>
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span>
+      <span><kbd>Shift</kbd> run</span>
+      <span><kbd>Mouse</kbd> camera</span>
+      <span><kbd>E</kbd> interact</span>
+      <span><kbd>1</kbd>–<kbd>4</kbd> switch character</span>
+      <span><kbd>Space</kbd> jump (2× = double jump)</span>
+      <span><kbd>Esc</kbd> pause</span>
     </div>
   );
 }
@@ -172,12 +172,12 @@ function IntroOverlay({ text }) {
     <>
       {t < 8.5 && (
         <div className={`announce ${t > 7.5 ? 'fade' : ''}`}>
-          <div className="announce-tag">⚠ HITNO OBAVJEŠTENJE ⚠</div>
+          <div className="announce-tag">⚠ URGENT ANNOUNCEMENT ⚠</div>
           <div className="announce-text" data-testid="announcement">{typed}</div>
         </div>
       )}
       <div className="alarm-vignette" />
-      <button className="btn skip" data-testid="skip-intro" onClick={skipIntro}>Preskoči ▸▸ <small>(Enter)</small></button>
+      <button className="btn skip" data-testid="skip-intro" onClick={skipIntro}>Skip ▸▸ <small>(Enter)</small></button>
     </>
   );
 }
@@ -198,7 +198,7 @@ function HUD() {
   return (
     <>
       <div className="hud-objective" data-testid="objective">
-        <div className="mission-name">MISIJA {mission.number} · {mission.title.toUpperCase()}</div>
+        <div className="mission-name">MISSION {mission.number} · {mission.title.toUpperCase()}</div>
         <div className="objective-text">▸ {objective}</div>
         <div className="components">
           {items.map(({ id, label, color, got }) => (
@@ -207,7 +207,7 @@ function HUD() {
             </div>
           ))}
         </div>
-        {mission.stars && <div className="stars-hud" data-testid="stars">⭐ Zvjezdice: {st.stars.length}/{mission.stars.length} <small>(skači!)</small></div>}
+        {mission.stars && <div className="stars-hud" data-testid="stars">⭐ Stars: {st.stars.length}/{mission.stars.length} <small>(jump!)</small></div>}
         {HudExtra && <HudExtra />}
       </div>
       <div className="char-bar">
@@ -223,7 +223,7 @@ function HUD() {
         <div className="interact-prompt" data-testid="interact-prompt"><kbd>E</kbd> {st.nearby.label}</div>
       )}
       {!locked && st.phase === 'playing' && !st.builderOpen && (
-        <div className="look-hint" onClick={lockPointer}>Klikni na igru da gledaš okolo mišem (ili prevuci)</div>
+        <div className="look-hint" onClick={lockPointer}>Click the game to look around with the mouse (or drag)</div>
       )}
     </>
   );
@@ -252,11 +252,11 @@ function PauseMenu() {
   return (
     <div className="screen pause" data-testid="pause-menu">
       <div className="panel">
-        <h2>PAUZA</h2>
-                <button className="btn primary" onClick={resume}>Nastavi</button>
-        <button className="btn" onClick={restartMission}>Počni misiju ispočetka</button>
-        <button className="btn" onClick={() => useGame.getState().toggleMute()}>{muted ? 'Uključi zvuk' : 'Isključi zvuk'}</button>
-        <button className="btn" onClick={() => { useGame.getState().resetMission(); useGame.setState({ phase: 'title' }); }}>Nazad na naslovnu</button>
+        <h2>PAUSED</h2>
+                <button className="btn primary" onClick={resume}>Resume</button>
+        <button className="btn" onClick={restartMission}>Restart mission</button>
+        <button className="btn" onClick={() => useGame.getState().toggleMute()}>{muted ? 'Unmute sound' : 'Mute sound'}</button>
+        <button className="btn" onClick={() => { useGame.getState().resetMission(); useGame.setState({ phase: 'title' }); }}>Back to title</button>
         <Controls />
       </div>
     </div>
@@ -274,9 +274,9 @@ function CompleteScreen() {
     <div className="screen complete" data-testid="complete-screen">
       <div className="panel wide">
         <div className="stamp">{mission.certificate}</div>
-        <h1>MISIJA {mission.number} ZAVRŠENA</h1>
-        <p className="stats">Vrijeme: {Math.floor(secs / 60)} min {secs % 60} s · {mission.attemptLabel}: {st.attempts}{mission.extraStats ? ` · ${mission.extraStats(st)}` : ''}{mission.stars ? ` · Zvjezdice: ${st.stars.length}/${mission.stars.length}` : ''} · Titula: {rank}</p>
-        <h3>📚 Šta si upravo naučio/la: {L.title}</h3>
+        <h1>MISSION {mission.number} COMPLETE</h1>
+        <p className="stats">Time: {Math.floor(secs / 60)} min {secs % 60} s · {mission.attemptLabel}: {st.attempts}{mission.extraStats ? ` · ${mission.extraStats(st)}` : ''}{mission.stars ? ` · Stars: ${st.stars.length}/${mission.stars.length}` : ''} · Rank: {rank}</p>
+        <h3>📚 What you just learned: {L.title}</h3>
         <div className="lesson-grid">
           {L.points.map(([k, v]) => <div key={k} className="lesson"><b>{k}</b><span>{v}</span></div>)}
         </div>
@@ -288,15 +288,15 @@ function CompleteScreen() {
         {mission.Finale && <mission.Finale />}
         <div className="next">
           {MISSIONS.filter((m) => m.number > mission.number).map((m) => (
-            <div key={m.id} className="next-card"><b>Misija {m.number}: {m.title}</b><span>{m.tagline}</span><em>{m.status === 'available' ? 'Otključano!' : 'Uskoro'}</em></div>
+            <div key={m.id} className="next-card"><b>Mission {m.number}: {m.title}</b><span>{m.tagline}</span><em>{m.status === 'available' ? 'Unlocked!' : 'Coming soon'}</em></div>
           ))}
         </div>
         <div className="title-buttons">
           {next?.status === 'available' && (
-            <button className="btn primary" data-testid="next-mission" onClick={() => startMission({ missionId: next.id })}>▶ Nastavi na Misiju {next.number}</button>
+            <button className="btn primary" data-testid="next-mission" onClick={() => startMission({ missionId: next.id })}>▶ Continue to Mission {next.number}</button>
           )}
-          <button className={`btn ${next?.status === 'available' ? '' : 'primary'}`} onClick={() => startMission()}>Igraj ponovo Misiju {mission.number}</button>
-          <button className="btn" onClick={() => { useGame.setState({ phase: 'title' }); }}>Naslovna</button>
+          <button className={`btn ${next?.status === 'available' ? '' : 'primary'}`} onClick={() => startMission()}>Replay Mission {mission.number}</button>
+          <button className="btn" onClick={() => { useGame.setState({ phase: 'title' }); }}>Title screen</button>
         </div>
       </div>
     </div>

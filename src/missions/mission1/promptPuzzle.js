@@ -1,50 +1,51 @@
 // Mission 1 puzzle rules. Pure data + logic (no React / three) so it is unit-testable.
 
 export const SLOTS = [
-  { id: 'role', label: 'ULOGA', color: '#f472b6', question: 'KO treba da bude AI?' },
-  { id: 'task', label: 'ZADATAK', color: '#60a5fa', question: 'ŠTA tačno treba da uradi?' },
-  { id: 'context', label: 'KONTEKST', color: '#34d399', question: 'ZA KOGA i u kakvoj situaciji?' },
-  { id: 'format', label: 'FORMAT', color: '#fbbf24', question: 'KAKO treba da izgleda odgovor?' },
+  { id: 'role', label: 'ROLE', color: '#f472b6', question: 'WHO should the AI be?' },
+  { id: 'task', label: 'TASK', color: '#60a5fa', question: 'WHAT exactly should it do?' },
+  { id: 'context', label: 'CONTEXT', color: '#34d399', question: 'FOR WHOM, in what situation?' },
+  { id: 'format', label: 'FORMAT', color: '#fbbf24', question: 'HOW should the answer look?' },
 ];
 
 // `good` cards must be found in the room first. Decoys are always available (and always wrong).
+// Each decoy shows a short bad answer and, after the arrow, why it is bad.
 export const CARDS = {
   role: [
-    { id: 'role_good', good: true, text: 'Ti si strpljiv tutor iz biologije koji objašnjava srednjoškolcima.' },
-    { id: 'role_toaster', text: 'Ti si toster.', fail: 'TOSTER: Mogu samo da ispečem hljeb. → Pogrešna uloga daje beskoristan odgovor.' },
-    { id: 'role_none', text: '(bez uloge)', fail: 'Evo opšteg teksta o učenju, za bilo koga. → Bez uloge AI ne zna kako da ti se obrati.' },
+    { id: 'role_good', good: true, text: 'You are a patient biology tutor who explains things to high-school students.' },
+    { id: 'role_toaster', text: 'You are a toaster.', fail: 'TOASTER: All I can do is toast bread. → The wrong role gives a useless answer.' },
+    { id: 'role_none', text: '(no role)', fail: 'Here is a general text about studying, for anyone. → Without a role, the AI does not know how to talk to you.' },
   ],
   task: [
-    { id: 'task_good', good: true, text: 'Napravi mi plan učenja za kontrolni iz fotosinteze.' },
-    { id: 'task_vague', text: 'Uradi nešto sa biljkama.', fail: 'Evo liste sobnih biljaka. → Nejasan zadatak: AI ne zna da ti treba plan učenja.' },
-    { id: 'task_huge', text: 'Objasni mi cijelu biologiju. Odmah.', fail: 'Lekcija 1 od 9.000... → Prevelik zadatak. Traži jednu konkretnu stvar.' },
+    { id: 'task_good', good: true, text: 'Make me a study plan for my photosynthesis test.' },
+    { id: 'task_vague', text: 'Do something with plants.', fail: 'Here is a list of house plants. → Vague task: the AI does not know you need a study plan.' },
+    { id: 'task_huge', text: 'Explain all of biology. Now.', fail: 'Lesson 1 of 9,000... → The task is too big. Ask for one specific thing.' },
   ],
   context: [
-    { id: 'context_good', good: true, text: 'Ja sam učenik 1. razreda gimnazije, kontrolni je za 3 dana, imam 30 min dnevno i slabije razumijem hemijski dio.' },
-    { id: 'context_tuesday', text: 'Kontekst: utorak je.', fail: 'Plan za 30 dana, po 3 sata dnevno. → AI ne zna koliko imaš vremena ni šta ti ne ide.' },
-    { id: 'context_vibes', text: 'Bez konteksta.', fail: 'Plan za studente biologije. → Bez konteksta AI nagađa ko si.' },
+    { id: 'context_good', good: true, text: 'I am in my first year of high school, the test is in 3 days, I have 30 minutes a day and I struggle with the chemistry part.' },
+    { id: 'context_tuesday', text: 'Context: it is Tuesday.', fail: 'A plan for 30 days, 3 hours a day. → The AI does not know how much time you have or what you find hard.' },
+    { id: 'context_vibes', text: 'No context.', fail: 'A plan for university biology students. → Without context, the AI guesses who you are.' },
   ],
   format: [
-    { id: 'format_good', good: true, text: 'Daj tabelu: Dan, Šta učim, Kako se provjerim.' },
-    { id: 'format_dance', text: 'Format: kako god.', fail: 'Dugačak tekst bez reda. → Nisi rekao/la kako odgovor treba da izgleda.' },
-    { id: 'format_wall', text: 'Jedan pasus od 47 strana.', fail: 'Fotosintezajeprocesukojembiljke... (strana 1 od 47) → Ovo ne možeš koristiti za učenje.' },
+    { id: 'format_good', good: true, text: 'Give me a table: Day, What I study, How I check myself.' },
+    { id: 'format_dance', text: 'Format: whatever.', fail: 'A long text with no structure. → You did not say what the answer should look like.' },
+    { id: 'format_wall', text: 'One 47-page paragraph.', fail: 'Photosynthesisistheprocessbywhichplants... (page 1 of 47) → You cannot study from this.' },
   ],
 };
 
 export const HINTS = {
-  role: 'ULOGA: izaberi stručnjaka za ono što ti treba.',
-  task: 'ZADATAK: jedna jasna, konkretna stvar.',
-  context: 'KONTEKST: ko si i kakva je situacija.',
-  format: 'FORMAT: kako odgovor treba da izgleda.',
+  role: 'ROLE: pick an expert in what you need.',
+  task: 'TASK: one clear, specific thing.',
+  context: 'CONTEXT: who you are and what your situation is.',
+  format: 'FORMAT: what the answer should look like.',
 };
 
 export const SUCCESS_OUTPUT = [
-  'PLAN UČENJA: Fotosinteza (3 dana po 30 min, 1. razred)',
-  '| Dan | Šta učim                                   | Kako se provjerim                       |',
-  '| 1   | Šta je fotosinteza: svjetlost, voda, CO2   | Objasnim drugu u 3 rečenice, bez sveske |',
-  '| 2   | Hemijski dio, polako: jednačina, dio po dio | Napišem jednačinu napamet i imenujem sve |',
-  '| 3   | Ponavljanje + 10 pitanja kao na kontrolnom | Riješim bez gledanja, pa ispravim greške |',
-  'Savjet tutora: hemijski dio ponovi svaki dan po 10 minuta. Malo, ali redovno.',
+  'STUDY PLAN: Photosynthesis (3 days, 30 min a day, 1st year)',
+  '| Day | What I study                               | How I check myself                         |',
+  '| 1   | What photosynthesis is: light, water, CO2  | Explain it to a friend in 3 sentences      |',
+  '| 2   | The chemistry part, slowly: the equation   | Write the equation from memory, name parts |',
+  '| 3   | Review + 10 test-style questions           | Answer without notes, then fix my mistakes |',
+  'Tutor tip: go over the chemistry part for 10 minutes every day. Little, but often.',
 ];
 
 export const cardById = (id) => {
@@ -86,7 +87,7 @@ export function evaluatePrompt(selection, inventory) {
   let output;
   if (success) output = SUCCESS_OUTPUT.join('\n');
   else if (wrong.length) output = CARDS[wrong[0]].find((c) => c.id === selection[wrong[0]]).fail;
-  else output = `PROMPT NIJE POTPUN. Nedostaje: ${missing.map((m) => SLOTS.find((s) => s.id === m).label).join(', ')}.`;
+  else output = `PROMPT INCOMPLETE. Missing: ${missing.map((m) => SLOTS.find((s) => s.id === m).label).join(', ')}.`;
 
   return { success, score, results, wrong, missing, output };
 }

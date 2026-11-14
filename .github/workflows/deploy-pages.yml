@@ -1,10 +1,9 @@
-# Publishes the game to GitHub Pages on every push to main
-# (and to the branch the student edition was first developed on).
+# Publishes the game to GitHub Pages on every push to main.
 # Enable once: repo Settings -> Pages -> Source: "GitHub Actions".
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [main, claude/loving-fermat-nz5cve]
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

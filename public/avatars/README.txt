@@ -1,2 +1,2 @@
-Ovdje stavi svoje GLB avatare (npr. mastermind.glb) i poveži ih u src/characters/roster.js.
-Pogledaj odjeljak "Sopstveni avatari" u glavnom README fajlu.
+Put custom GLB avatars here (e.g. mastermind.glb) and point to them from src/characters/roster.js.
+See the "Custom avatars" section of the main README.

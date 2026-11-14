@@ -9,8 +9,8 @@ test('perfect prompt with all components collected succeeds at 100%', () => {
   const r = evaluatePrompt(good, ALL);
   assert.equal(r.success, true);
   assert.equal(r.score, 100);
-  assert.match(r.output, /Kako se provjerim/);
-  assert.match(r.output, /PLAN UČENJA/);
+  assert.match(r.output, /How I check myself/);
+  assert.match(r.output, /STUDY PLAN/);
 });
 
 test('good card that was not collected counts as missing', () => {
@@ -24,15 +24,15 @@ test('decoy card fails with its funny output', () => {
   const r = evaluatePrompt({ ...good, role: 'role_toaster' }, ALL);
   assert.equal(r.success, false);
   assert.deepEqual(r.wrong, ['role']);
-  assert.match(r.output, /TOSTER/);
+  assert.match(r.output, /TOASTER/);
 });
 
 test('empty selection fails and names the empty parts', () => {
   const r = evaluatePrompt({}, ALL);
   assert.equal(r.score, 0);
   assert.equal(r.missing.length, 4);
-  assert.match(r.output, /ULOGA/);
-  assert.match(r.output, /Nedostaje/);
+  assert.match(r.output, /ROLE/);
+  assert.match(r.output, /Missing/);
 });
 
 test('every slot has exactly one good card and decoys with failure text', () => {
@@ -51,8 +51,8 @@ test('availability: good cards locked until collected, decoys always available',
 
 test('the good cards build a prompt that serves a student', () => {
   const text = SLOTS.map((s) => CARDS[s.id].find((c) => c.good).text).join(' ');
-  assert.match(text, /tutor iz biologije/);
-  assert.match(text, /plan učenja/);
-  assert.match(text, /učenik 1\. razreda/);
-  assert.match(text, /tabelu/);
+  assert.match(text, /biology tutor/);
+  assert.match(text, /study plan/);
+  assert.match(text, /first year of high school/);
+  assert.match(text, /table/);
 });

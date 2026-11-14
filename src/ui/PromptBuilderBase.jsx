@@ -17,7 +17,7 @@ import { sfx } from '../game/audio.js';
  */
 export default function PromptBuilderBase({
   title, tag, subtitle, slots, cards, isAvailable, lockedText, assemble, onTest, onSuccess,
-  testLabel = '⚡ TESTIRAJ PROMPT', thinkingLabel = 'RAZMIŠLJAM…', successFoot = 'Otključavam…', theme = 'cyan', successDelay = 4200,
+  testLabel = '⚡ TEST PROMPT', thinkingLabel = 'THINKING…', successFoot = 'Unlocking…', theme = 'cyan', successDelay = 4200,
 }) {
   const inventory = useGame((s) => s.inventory);
   const selection = useGame((s) => s.selection);
@@ -56,7 +56,7 @@ export default function PromptBuilderBase({
             <div className="builder-title">{title} <span>{tag}</span></div>
             <div className="builder-sub">{subtitle}</div>
           </div>
-          <button className="btn small" onClick={() => useGame.getState().closeBuilder()} data-testid="builder-close">✕ Zatvori (Esc)</button>
+          <button className="btn small" onClick={() => useGame.getState().closeBuilder()} data-testid="builder-close">✕ Close (Esc)</button>
         </div>
 
         <div className={`slots n${slots.length}`}>
@@ -86,16 +86,16 @@ export default function PromptBuilderBase({
           })}
         </div>
 
-        <div className="assembled"><b>TVOJ PROMPT:</b> {assemble(selection)}</div>
+        <div className="assembled"><b>YOUR PROMPT:</b> {assemble(selection)}</div>
 
         <div className="builder-foot">
           <button className="btn primary big" onClick={test} disabled={busy} data-testid="test-prompt">{busy && !result ? thinkingLabel : testLabel}</button>
-          <span className="muted">Pokušaja: {attempts}</span>
+          <span className="muted">Attempts: {attempts}</span>
         </div>
 
         {(result || busy) && (
           <div className={`ai-output ${result ? (result.success ? 'success' : 'fail') : ''}`} data-testid="ai-output">
-            <div className="ai-head">{!result ? 'GENERIŠEM…' : result.success ? `✅ PROMPT PRIHVAĆEN — KVALITET ${result.score}%` : `❌ PROMPT ODBIJEN — KVALITET ${result.score}%`}</div>
+            <div className="ai-head">{!result ? 'GENERATING…' : result.success ? `✅ PROMPT ACCEPTED — QUALITY ${result.score}%` : `❌ PROMPT REJECTED — QUALITY ${result.score}%`}</div>
             <pre>{typed}</pre>
             {result?.success && <div className="ai-foot">{successFoot}</div>}
           </div>

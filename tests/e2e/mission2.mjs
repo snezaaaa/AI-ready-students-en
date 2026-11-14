@@ -1,4 +1,4 @@
-// End-to-end play-through of Mission 2 (Kriza kod automata) in headless Chromium with WebGL.
+// End-to-end play-through of Mission 2 (The Vending Machine Crisis) in headless Chromium with WebGL.
 // Usage: npm run build && (npx vite preview --port 4173 &) && npm run test:e2e:m2
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
@@ -32,21 +32,21 @@ await page.goto(BASE);
 await page.waitForSelector('[data-testid=start]', { timeout: 60000 });
 await page.click('[data-testid=select-mission2]');
 await wait(300);
-check('mission select shows Mission 2', /POKRENI MISIJU 2/.test(await page.textContent('[data-testid=start]')));
+check('mission select shows Mission 2', /START MISSION 2/.test(await page.textContent('[data-testid=start]')));
 await shot('m2-01-title-select');
 
 // ---- intro
 await page.click('[data-testid=start]');
 await wait(2600);
 const ann = await page.textContent('[data-testid=announcement]').catch(() => '');
-check('Mission 2 cinematic announcement', /AUTOMAT ZA UŽINU JE VAN KONTROLE/.test(ann), JSON.stringify(ann));
+check('Mission 2 cinematic announcement', /THE SNACK MACHINE IS OUT OF CONTROL/.test(ann), JSON.stringify(ann));
 await shot('m2-02-intro');
 await wait(5500); await shot('m2-03-intro-brew');
 await page.keyboard.press('Enter');
 check('intro skippable -> playing in the school hallway', await waitFor((s) => s.phase === 'playing' && s.missionId === 'mission2', 5000));
 let s = await st();
 check('the leaflet (unreliable source) is handed over', s.inventory.includes('brochure'));
-check('energy meter in HUD', await page.isVisible('[data-testid=caffeine]') && /ENERGIJA/.test(await page.textContent('[data-testid=caffeine]')));
+check('energy meter in HUD', await page.isVisible('[data-testid=caffeine]') && /ENERGY/.test(await page.textContent('[data-testid=caffeine]')));
 await wait(1200); await shot('m2-04-gameplay');
 
 // ---- movement still works here
@@ -74,7 +74,7 @@ await wait(900);
 await parkBots();
 await teleport(0, -3.4, 0); await wait(300);
 await page.keyboard.press('KeyE'); await wait(500);
-check('without evidence the verdict buttons are locked and the station says where to look', await page.isDisabled('[data-testid=verdict-c1-true]') && /Zvanični zdravstveni sajt/.test(await page.textContent('[data-testid=evidence-missing-c1]')));
+check('without evidence the verdict buttons are locked and the station says where to look', await page.isDisabled('[data-testid=verdict-c1-true]') && /Official health website/.test(await page.textContent('[data-testid=evidence-missing-c1]')));
 await page.keyboard.press('Escape'); await wait(300);
 
 // ---- wrong character, then each character's evidence
@@ -83,7 +83,7 @@ await page.keyboard.press('Digit2'); await wait(250);
 await teleport(1, 8.5, -3.5); await wait(300);
 await page.keyboard.press('KeyE'); await wait(400);
 s = await st();
-check('wrong character cannot use the bookshelf', !s.inventory.includes('textbook') && /Ovo može samo GPT/.test(s.line), s.line.slice(0, 50));
+check('wrong character cannot use the bookshelf', !s.inventory.includes('textbook') && /Only GPT can do this/.test(s.line), s.line.slice(0, 50));
 
 const plan = [
   ['Digit1', 0, [8.5, -3.5], 'textbook', 'GPT / biology textbook on the library shelf'],
@@ -131,7 +131,7 @@ check('snack from the backpack refills energy (+10)', (await st()).ms.caffeine >
 await patchMs({ caffeine: 0.4 });
 check('energy at 0 triggers the asleep-in-class failure state', await waitFor((s) => s.ms.napping && s.phase === 'cutscene', 4000));
 await wait(600);
-check('nap overlay shown', await page.isVisible('[data-testid=nap-overlay]') && /ZASPALI STE NA ČASU/.test(await page.textContent('[data-testid=nap-overlay]')));
+check('nap overlay shown', await page.isVisible('[data-testid=nap-overlay]') && /YOU FELL ASLEEP IN CLASS/.test(await page.textContent('[data-testid=nap-overlay]')));
 await shot('m2-06-nap');
 check('wake up after the nap with 60% energy', await advanceUntil('playing'));
 s = await st();
@@ -147,8 +147,8 @@ const answer = async (claim, verdict) => {
   await page.click(`[data-testid=verdict-${claim}-${verdict}]`);
 };
 check('submit is locked until all 5 claims are answered', await page.isDisabled('[data-testid=submit-factcheck]'));
-check('each claim shows exactly one piece of evidence and no source choice', (await page.$$('.evidence')).length === 1 && (await page.$$('.source')).length === 0 && /Zvanični zdravstveni sajt/.test(await page.textContent('[data-testid=evidence-c1]')));
-check('only two answers: TAČNO or HALUCINACIJA', (await page.$$('.verdict')).length === 2 && /HALUCINACIJA/.test(await page.textContent('[data-testid=verdict-c1-false]')));
+check('each claim shows exactly one piece of evidence and no source choice', (await page.$$('.evidence')).length === 1 && (await page.$$('.source')).length === 0 && /Official health website/.test(await page.textContent('[data-testid=evidence-c1]')));
+check('only two answers: TRUE or HALLUCINATION', (await page.$$('.verdict')).length === 2 && /HALLUCINATION/.test(await page.textContent('[data-testid=verdict-c1-false]')));
 await answer('c1', 'true');   // wrong on purpose: the evidence says the opposite
 await answer('c2', 'true');
 await answer('c3', 'false');
@@ -170,7 +170,7 @@ await page.click('[data-testid=submit-factcheck]');
 await page.waitForSelector('.ai-output.success', { timeout: 6000 });
 await wait(2500); await shot('m2-09-factcheck-success');
 const out2 = await page.evaluate(() => window.__game.useGame.getState().lastResult?.output || '');
-check('report lists 2 true claims and 3 hallucinations', (out2.match(/HALUCINACIJA/g) || []).length === 3 && (out2.match(/TAČNO /g) || []).length === 2);
+check('report lists 2 true claims and 3 hallucinations', (out2.match(/HALLUCINATION/g) || []).length === 3 && (out2.match(/TRUE /g) || []).length === 2);
 check('correct fact-check grounds SNACK-O-MAT -> cutscene', await waitFor((s) => s.phase === 'cutscene' && s.doorOpen, 9000));
 await wait(2500); await shot('m2-10-grounded');
 check('back to gameplay after the cutscene', await advanceUntil('playing'));
@@ -184,9 +184,9 @@ await wait(2500); await shot('m2-11-victory');
 check('mission 2 complete screen', await advanceUntil('complete'));
 await wait(600);
 const txt = await page.textContent('[data-testid=complete-screen]');
-check('debrief: 66% certificate + fact-checking lesson', /66%/.test(txt) && /halucinacije/i.test(txt) && /MISIJA 2 ZAVRŠENA/.test(txt) && /AI NIJE UVIJEK U KRIVU/.test(txt));
+check('debrief: 66% certificate + fact-checking lesson', /66%/.test(txt) && /hallucinations/i.test(txt) && /MISSION 2 COMPLETE/.test(txt) && /AI IS NOT ALWAYS WRONG/.test(txt));
 await shot('m2-12-complete');
-check('debrief offers "Nastavi na Misiju 3"', /Misiju 3/.test(await page.textContent('[data-testid=next-mission]').catch(() => '')));
+check('debrief offers "Continue to Mission 3"', /Mission 3/.test(await page.textContent('[data-testid=next-mission]').catch(() => '')));
 
 const real = errors.filter((e) => !/GPU stall|WebGL|AudioContext/i.test(e));
 check('no runtime errors in console', real.length === 0, real.slice(0, 3).join(' | '));

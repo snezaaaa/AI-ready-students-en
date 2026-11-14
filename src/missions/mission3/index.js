@@ -1,4 +1,4 @@
-// Mission 3 — KONAČNI SERTIFIKAT, the school archive (see registry.js for the mission interface)
+// Mission 3 — THE FINAL CERTIFICATE, the school archive (see registry.js for the mission interface)
 import VaultHall from './VaultHall.jsx';
 import * as m3 from './logic.js';
 import { VaultPuzzle, StrikesHud, LockdownOverlay, Finale } from './ui.jsx';
@@ -6,13 +6,13 @@ import { SEALS } from './dilemmas.js';
 import { SPAWNS, buildColliders, OPEN_SPACES, STARS } from './layout.js';
 
 export default {
-  id: 'mission3', number: 3, title: 'Konačni sertifikat', status: 'available',
-  tagline: 'Školska arhiva: 4 dileme o odgovornoj upotrebi AI, hodnik sa senzorima i konačni prompt.',
-  announcement: 'PAŽNJA, UČENICI. ZA KONAČNI SERTIFIKAT TREBA... JOŠ JEDAN PROMPT.',
-  certificate: 'SERTIFIKAT OTKLJUČAN 100%',
-  attemptLabel: 'Pokušaja sa konačnim promptom',
-  ranks: ['AI ISTRAŽIVAČ: ODLIČAN (5)', 'AI ISTRAŽIVAČ', 'AI ISTRAŽIVAČ: POČETNIK'],
-  extraStats: (s) => `Greške kod pečata: ${s.ms.strikes || 0} · Vanredni časovi: ${s.ms.lockdowns || 0} · Aktivirani senzori: ${s.ms.zaps || 0}`,
+  id: 'mission3', number: 3, title: 'The Final Certificate', status: 'available',
+  tagline: 'The school archive: 4 dilemmas about responsible AI use, a sensor corridor and the final prompt.',
+  announcement: 'ATTENTION, STUDENTS. THE FINAL CERTIFICATE NEEDS... ONE LAST PROMPT.',
+  certificate: 'CERTIFICATE 100% UNLOCKED',
+  attemptLabel: 'Final prompt attempts',
+  ranks: ['AI EXPLORER: EXCELLENT', 'AI EXPLORER', 'AI EXPLORER: BEGINNER'],
+  extraStats: (s) => `Seal strikes: ${s.ms.strikes || 0} · Lockdowns: ${s.ms.lockdowns || 0} · Sensors triggered: ${s.ms.zaps || 0}`,
   startYaw: 0,
   initialState: m3.initialState,
   PuzzleUI: VaultPuzzle,
@@ -21,7 +21,7 @@ export default {
   Finale,
   hudItems: (s) => [
     ...SEALS.slice().sort((a, b) => a.key - b.key).map((x) => ({ id: x.id, label: `${x.key} ${x.label}`, color: x.color, got: s.inventory.includes(x.id) })),
-    { id: 'final', label: '4 KONAČNI PROMPT', color: '#e879f9', got: s.doorOpen },
+    { id: 'final', label: '4 FINAL PROMPT', color: '#e879f9', got: s.doorOpen },
   ],
   Level: VaultHall,
   spawns: SPAWNS,
@@ -42,18 +42,18 @@ export default {
     victory: { center: [0, 1.3, -24.2], radius: 5.2, height: 2.3 },
   },
   lesson: {
-    title: 'Odgovorna upotreba AI',
+    title: 'Using AI responsibly',
     points: [
-      ['PRIVATNOST', 'U javni chatbot ne unosi slike, adresu, ocjene ni poruke. Ni svoje ni tuđe. Deepfake bez pristanka nije šala.'],
-      ['INTEGRITET', 'AI može da pomogne oko ideja, plana i komentara. Rad mora biti tvoj. Reci kad si koristio AI i kako.'],
-      ['PRISTRASNOST', 'AI ponavlja stereotipe iz podataka na kojima je učio. Traži raznolike primjere i pregledaj šta dobiješ.'],
-      ['ODGOVORNOST', 'AI pravi nacrt, a ti odlučuješ. Provjeri odgovore, jer za ono što predaš odgovaraš ti.'],
+      ['PRIVACY', 'Do not put photos, your address, grades or messages into a public chatbot. Not yours, not anyone else\'s. A deepfake made without consent is not a joke.'],
+      ['INTEGRITY', 'AI can help with ideas, a plan and feedback. The work has to be yours. Say when you used AI, and how.'],
+      ['BIAS', 'AI repeats stereotypes from the data it learned from. Ask for varied examples and review what you get.'],
+      ['RESPONSIBILITY', 'AI makes a draft, you decide. Check the answers, because you are responsible for what you hand in.'],
     ],
     example: {
-      badLabel: 'Slab prompt', goodLabel: 'Jak prompt',
-      bad: '„Napravi plakat o AI. Evo imena i ocjena svih iz mog odjeljenja.“',
-      good: '„Ti si dizajner školskih plakata koji piše kratko i jasno za tinejdžere. Napravi plakat sa pravilima korištenja AI u našem odjeljenju. Za učenike 2. razreda srednje škole; plakat stoji na zidu učionice i čita se za jedan minut. Naslov i 5 kratkih pravila, svako u jednoj rečenici. Zaštitna pravila: ne dijelimo lične podatke, rad je naš i kažemo kad smo koristili AI, pazimo na stereotipe, provjeravamo odgovore.“',
+      badLabel: 'Weak prompt', goodLabel: 'Strong prompt',
+      bad: '"Make a poster about AI. Here are the names and grades of everyone in my class."',
+      good: '"You are a school poster designer who writes short, clear text for teenagers. Make a poster with rules for using AI in our class. For second-year high-school students; the poster hangs on the classroom wall and can be read in one minute. A title and 5 short rules, one sentence each. Safety rules: we do not share personal data, the work is ours and we say when we used AI, we watch out for stereotypes, we check the answers."',
     },
-    extra: 'Prije nego što koristiš AI za školu, pitaj nastavnika koja su pravila za taj predmet. Odgovorna upotreba je navika, a ne jedno dugme.',
+    extra: 'Before you use AI for school, ask your teacher what the rules are for that subject. Responsible use is a habit, not a single button.',
   },
 };

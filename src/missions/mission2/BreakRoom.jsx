@@ -60,16 +60,16 @@ function useTextures() {
     });
     return {
       floor, books, skyline,
-      breakSign: sign(512, 128, '#7c2d12', '#fde68a', ['ŠKOLSKI HODNIK'], 54),
-      noNap: sign(256, 128, '#1e3a8a', '#ffffff', ['NE SPAVAJ', 'pazi na energiju'], 34),
-      station: sign(512, 128, '#f59e0b', '#111111', ['PROVJERA ČINJENICA', 'vjeruj · ali · provjeri'], 44),
-      manager: sign(256, 64, '#111827', '#facc15', ['KATEDRA · NE DIRAJ'], 26),
-      m3: sign(512, 256, '#1e1b4b', '#c4b5fd', ['MISIJA 3', 'KONAČNI SERTIFIKAT', 'SLJEDEĆA MISIJA'], 44),
-      vaultSign: sign(256, 96, '#065f46', '#d1fae5', ['ARHIVA'], 50),
-      donutLabel: sign(256, 64, '#dcfce7', '#166534', ['JABUKE · KANTINA'], 26),
+      breakSign: sign(512, 128, '#7c2d12', '#fde68a', ['SCHOOL HALLWAY'], 54),
+      noNap: sign(256, 128, '#1e3a8a', '#ffffff', ['STAY AWAKE', 'watch your energy'], 34),
+      station: sign(512, 128, '#f59e0b', '#111111', ['FACT-CHECK STATION', 'trust · but · verify'], 44),
+      manager: sign(256, 64, '#111827', '#facc15', ['TEACHER · KEEP OUT'], 26),
+      m3: sign(512, 256, '#1e1b4b', '#c4b5fd', ['MISSION 3', 'THE FINAL CERTIFICATE', 'NEXT MISSION'], 44),
+      vaultSign: sign(256, 96, '#065f46', '#d1fae5', ['ARCHIVE'], 50),
+      donutLabel: sign(256, 64, '#dcfce7', '#166534', ['APPLES · CANTEEN'], 26),
       bulletin: makeCanvasTexture(512, 320, (g, w, h) => {
         g.fillStyle = '#b45309'; g.fillRect(0, 0, w, h); g.fillStyle = '#d97706'; g.fillRect(12, 12, w - 24, h - 24);
-        const notes = [['#fef9c3', 'Kontrolni iz biologije: petak, 3. čas.'], ['#e0f2fe', 'Raspored zvonjenja'], ['#ffffff', 'ZdravljeHack420: „light čips je bukvalno vazduh“'], ['#fce7f3', 'Šahovska sekcija: srijedom.']];
+        const notes = [['#fef9c3', 'Biology test: Friday, 3rd period.'], ['#e0f2fe', 'Bell schedule'], ['#ffffff', 'HealthHack420: "light chips are literally air"'], ['#fce7f3', 'Chess club: Wednesdays.']];
         notes.forEach(([c, t], i) => { const x = 30 + (i % 2) * 240, y = 30 + Math.floor(i / 2) * 140; g.save(); g.translate(x + 100, y + 60); g.rotate((i - 1.5) * 0.04); g.fillStyle = c; g.fillRect(-100, -60, 200, 120); g.fillStyle = '#111'; g.font = 'bold 17px system-ui'; wrapText(g, t, -88, -32, 176, 21); g.fillStyle = '#dc2626'; g.beginPath(); g.arc(0, -52, 6, 0, 7); g.fill(); g.restore(); });
       }),
     };
@@ -103,9 +103,9 @@ function Brew() {
     g.stroke();
     // caption
     g.textAlign = 'center'; g.font = `28px ${FONT}`;
-    if (mood === 'humbled') { g.fillText('POGRIJEŠIO SAM.', w / 2, 420); g.font = 'bold 22px system-ui'; g.fillText('Sad navodim izvore. Izbacujem užinu...', w / 2, 460); }
-    else if (mood === 'gloating') { g.fillText('HA HA HA HA', w / 2, 420); g.font = 'bold 22px system-ui'; g.fillText(`Neuspjelih provjera: ${attempts}`, w / 2, 460); }
-    else { const c = CLAIMS[tick % CLAIMS.length]; g.font = 'bold 22px system-ui'; g.fillStyle = '#fde68a'; g.fillText(`ČINJENICA br. ${(tick % CLAIMS.length) + 1} (SKROZ TAČNA):`, w / 2, 395); g.fillStyle = '#fff'; g.font = 'bold 24px system-ui'; g.textAlign = 'left'; wrapText(g, c.text, 40, 432, w - 80, 30); }
+    if (mood === 'humbled') { g.fillText('I WAS WRONG.', w / 2, 420); g.font = 'bold 22px system-ui'; g.fillText('Now citing sources. Dispensing snacks...', w / 2, 460); }
+    else if (mood === 'gloating') { g.fillText('HA HA HA HA', w / 2, 420); g.font = 'bold 22px system-ui'; g.fillText(`Failed fact-checks: ${attempts}`, w / 2, 460); }
+    else { const c = CLAIMS[tick % CLAIMS.length]; g.font = 'bold 22px system-ui'; g.fillStyle = '#fde68a'; g.fillText(`FACT #${(tick % CLAIMS.length) + 1} (TOTALLY TRUE):`, w / 2, 395); g.fillStyle = '#fff'; g.font = 'bold 24px system-ui'; g.textAlign = 'left'; wrapText(g, c.text, 40, 432, w - 80, 30); }
   }, [mood, tick, attempts]);
   const doorOpen = useGame((s) => s.doorOpen);
   const snack = useRef();
@@ -160,15 +160,15 @@ function MopBots() {
     </group>
   ));
 }
-const WET = typeof document !== 'undefined' ? sign(256, 64, '#facc15', '#111', ['USISAVAM!'], 34) : null;
+const WET = typeof document !== 'undefined' ? sign(256, 64, '#facc15', '#111', ['CLEANING!'], 34) : null;
 
 // ---------------------------------------------------------------- evidence props
 function Fridge() {
   const open = useGame((s) => s.ms.fridgeOpen);
   const door = useRef();
   useFrame((_, dt) => { door.current.rotation.y = damp(door.current.rotation.y, open ? 1.6 : 0, 4, Math.min(dt, 0.1)); });
-  const mood = useMemo(() => sign(256, 96, '#0c4a6e', '#7dd3fc', ['HLADNA SAM'], 34), []);
-  const happy = useMemo(() => sign(256, 96, '#14532d', '#86efac', ['HVALA! :)'], 34), []);
+  const mood = useMemo(() => sign(256, 96, '#0c4a6e', '#7dd3fc', ['FEELING COLD'], 34), []);
+  const happy = useMemo(() => sign(256, 96, '#14532d', '#86efac', ['THANKS! :)'], 34), []);
   return (
     <group position={[PROPS.fridge.x, 0, PROPS.fridge.z]}>
       <Box s={[1.1, 2.3, 1.3]} p={[0.05, 1.15, 0]} c="#f1f5f9" o={{ metalness: 0.3, roughness: 0.35 }} />
@@ -190,8 +190,8 @@ function Dishwasher() {
   const ref = useRef();
   useFrame((_, dt) => { ref.current.position.x = damp(ref.current.position.x, moved ? PROPS.dishwasher.movedX : PROPS.dishwasher.x, 3, Math.min(dt, 0.1)); });
   const log = useMemo(() => makeCanvasTexture(256, 320, (g, w, h) => {
-    g.fillStyle = '#fefce8'; g.fillRect(0, 0, w, h); g.fillStyle = '#111'; g.font = 'bold 22px system-ui'; g.fillText('ZDRAVSTVENI SAJT', 20, 40);
-    g.font = '16px system-ui'; ['Energetska pića:', 'NE poboljšavaju pamćenje', 'nervoza, loš san', 'ne preporučuju se mladima', 'Izvor: ljekari'].forEach((t, i) => g.fillText(t, 20, 90 + i * 40));
+    g.fillStyle = '#fefce8'; g.fillRect(0, 0, w, h); g.fillStyle = '#111'; g.font = 'bold 22px system-ui'; g.fillText('HEALTH WEBSITE', 20, 40);
+    g.font = '16px system-ui'; ['Energy drinks:', 'do NOT improve memory', 'nervousness, poor sleep', 'not for young people', 'Source: doctors'].forEach((t, i) => g.fillText(t, 20, 90 + i * 40));
     g.fillStyle = 'rgba(180,180,180,.6)'; g.fillRect(150, 230, 80, 60);
   }), []);
   return (
@@ -241,11 +241,11 @@ function Cctv() {
     tex.userData.redraw((g, w, h) => {
       if (!played) {
         for (let i = 0; i < 400; i++) { const v = Math.random() * 255; g.fillStyle = `rgb(${v},${v},${v})`; g.fillRect(Math.random() * w, Math.random() * h, 6, 4); }
-        g.fillStyle = '#ef4444'; g.font = 'bold 16px system-ui'; g.fillText('NEMA SLIKE · TREBA OKO', 14, 24);
+        g.fillStyle = '#ef4444'; g.font = 'bold 16px system-ui'; g.fillText('NO PICTURE · NEEDS AN EYE', 14, 24);
       } else {
         g.fillStyle = '#1f2937'; g.fillRect(0, 0, w, h); g.fillStyle = '#d6d3d1'; g.fillRect(40, 50, 60, 90);
         const f = (t * 2) % 1; g.fillStyle = '#fff'; for (let i = 0; i < 10; i++) { g.beginPath(); g.arc(70 + Math.sin(i * 7) * 40 * f, 50 - f * 50 - i * 3, 8 + i, 0, 7); g.fill(); }
-        g.fillStyle = '#ef4444'; g.font = 'bold 18px system-ui'; g.fillText('LAŽNA NALJEPNICA', 104, 30); g.fillText('● REC UTO 09:14', 110, 150);
+        g.fillStyle = '#ef4444'; g.font = 'bold 18px system-ui'; g.fillText('FAKE STICKER', 124, 30); g.fillText('● REC TUE 09:14', 110, 150);
       }
     });
   });

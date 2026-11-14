@@ -50,57 +50,57 @@ function useStaticTextures() {
     const banner = makeCanvasTexture(1024, 160, (g, w, h) => {
       g.fillStyle = '#111827'; g.fillRect(0, 0, w, h);
       g.fillStyle = '#facc15'; g.font = `64px ${FONT}`; g.textAlign = 'center'; g.fillText('AI ESCAPE', w / 2, 78);
-      g.fillStyle = '#e5e7eb'; g.font = `bold 34px system-ui`; g.fillText('UČIONICA 204  •  ČAS TRAJE  •  NEMA IZLAZA*', w / 2, 128);
-      g.font = '18px system-ui'; g.fillText('*bez dobrog prompta', w - 140, 152);
+      g.fillStyle = '#e5e7eb'; g.font = `bold 34px system-ui`; g.fillText('CLASSROOM 204  •  CLASS IN SESSION  •  NO EXIT*', w / 2, 128);
+      g.font = '18px system-ui'; g.fillText('*without a good prompt', w - 140, 152);
     });
     const whiteboard = makeCanvasTexture(1024, 512, (g, w, h) => {
       g.fillStyle = '#f8fafc'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#1d4ed8'; g.font = `bold 46px "Comic Sans MS", "Chalkboard SE", system-ui`; g.fillText('ZAGONETKA', 40, 70);
+      g.fillStyle = '#1d4ed8'; g.font = `bold 46px "Comic Sans MS", "Chalkboard SE", system-ui`; g.fillText('RIDDLE', 40, 70);
       g.fillStyle = '#111827'; g.font = `36px "Comic Sans MS", "Chalkboard SE", system-ui`;
-      wrapText(g, '„Stručnjak sam, a nisam osoba. Igram nekoga, a nisam na sceni. Daj me AI-ju i znaće ko treba da bude. Šta sam ja?“', 40, 140, w - 80, 50);
+      wrapText(g, '"I am an expert, but not a person. I play a part, but not on stage. Give me to the AI and it knows who to be. What am I?"', 40, 140, w - 80, 50);
       g.fillStyle = '#dc2626'; g.fillText('?????', 40, 420);
-      g.fillStyle = '#16a34a'; g.font = `28px "Comic Sans MS", system-ui`; g.fillText('Pomoć: jedan od 4 dijela prompta.', 40, 480);
-      g.fillStyle = '#fde047'; g.fillRect(820, 300, 160, 140); g.fillStyle = '#111'; g.font = '24px system-ui'; g.fillText('Rješava:', 832, 340); g.fillText('GPT', 832, 372); g.fillText('(taster 1)', 832, 404);
+      g.fillStyle = '#16a34a'; g.font = `28px "Comic Sans MS", system-ui`; g.fillText('Hint: one of the 4 parts of a prompt.', 40, 480);
+      g.fillStyle = '#fde047'; g.fillRect(820, 300, 160, 140); g.fillStyle = '#111'; g.font = '24px system-ui'; g.fillText('Solved by:', 832, 340); g.fillText('GPT', 832, 372); g.fillText('(key 1)', 832, 404);
     });
     const vending = makeCanvasTexture(256, 512, (g, w, h) => {
       g.fillStyle = '#0f172a'; g.fillRect(0, 0, w, h);
       const cols = ['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
       for (let r = 0; r < 5; r++) for (let c = 0; c < 4; c++) { g.fillStyle = cols[(r * 4 + c) % 6]; g.fillRect(20 + c * 56, 30 + r * 80, 40, 56); }
-      g.fillStyle = '#fbbf24'; g.font = `18px ${FONT}`; g.fillText('UŽINA PO DOGOVORU', 12, 470);
-      g.fillStyle = '#fff'; g.font = 'bold 16px system-ui'; g.fillText('SAMO UZ DOBRU PONUDU', 34, 498);
+      g.fillStyle = '#fbbf24'; g.font = `18px ${FONT}`; g.fillText('SNACKS BY DEAL', 12, 470);
+      g.fillStyle = '#fff'; g.font = 'bold 16px system-ui'; g.fillText('GOOD OFFERS ONLY', 34, 498);
     });
     const coffeeSign = makeCanvasTexture(256, 128, (g, w, h) => {
       g.fillStyle = '#fef3c7'; g.fillRect(0, 0, w, h); g.fillStyle = '#b91c1c'; g.font = `30px ${FONT}`; g.textAlign = 'center';
-      g.fillText('NE RADI', w / 2, 55); g.fillStyle = '#111'; g.font = 'bold 18px system-ui'; g.fillText('Vidi: Misija 2', w / 2, 95);
+      g.fillText('CLOSED', w / 2, 55); g.fillStyle = '#111'; g.font = 'bold 18px system-ui'; g.fillText('See: Mission 2', w / 2, 95);
     });
     const exitSign = makeCanvasTexture(256, 96, (g, w, h) => {
-      g.fillStyle = '#065f46'; g.fillRect(0, 0, w, h); g.fillStyle = '#d1fae5'; g.font = `56px ${FONT}`; g.textAlign = 'center'; g.fillText('IZLAZ', w / 2, 70);
+      g.fillStyle = '#065f46'; g.fillRect(0, 0, w, h); g.fillStyle = '#d1fae5'; g.font = `56px ${FONT}`; g.textAlign = 'center'; g.fillText('EXIT', w / 2, 70);
     });
     const m2 = makeCanvasTexture(512, 256, (g, w, h) => {
       g.fillStyle = '#3b2412'; g.fillRect(0, 0, w, h); g.fillStyle = '#fbbf24'; g.font = `40px ${FONT}`; g.textAlign = 'center';
-      g.fillText('MISIJA 2', w / 2, 70); g.fillStyle = '#fff'; g.font = `32px ${FONT}`; g.fillText('KRIZA KOD', w / 2, 130); g.fillText('AUTOMATA', w / 2, 172);
-      g.fillStyle = '#86efac'; g.font = 'bold 24px system-ui'; g.fillText('SLJEDEĆA MISIJA', w / 2, 222);
+      g.fillText('MISSION 2', w / 2, 70); g.fillStyle = '#fff'; g.font = `32px ${FONT}`; g.fillText('THE VENDING', w / 2, 130); g.fillText('MACHINE CRISIS', w / 2, 172);
+      g.fillStyle = '#86efac'; g.font = 'bold 24px system-ui'; g.fillText('NEXT MISSION', w / 2, 222);
     });
     const m3 = makeCanvasTexture(512, 256, (g, w, h) => {
       g.fillStyle = '#1e1b4b'; g.fillRect(0, 0, w, h); g.fillStyle = '#c4b5fd'; g.font = `40px ${FONT}`; g.textAlign = 'center';
-      g.fillText('MISIJA 3', w / 2, 70); g.fillStyle = '#fff'; g.font = `32px ${FONT}`; g.fillText('KONAČNI', w / 2, 130); g.fillText('SERTIFIKAT', w / 2, 172);
-      g.fillStyle = '#fca5a5'; g.font = 'bold 24px system-ui'; g.fillText('ARHIVA ZAKLJUČANA', w / 2, 222);
+      g.fillText('MISSION 3', w / 2, 70); g.fillStyle = '#fff'; g.font = `32px ${FONT}`; g.fillText('THE FINAL', w / 2, 130); g.fillText('CERTIFICATE', w / 2, 172);
+      g.fillStyle = '#fca5a5'; g.font = 'bold 24px system-ui'; g.fillText('ARCHIVE LOCKED', w / 2, 222);
     });
     const clock = makeCanvasTexture(256, 256, (g, w) => {
       g.fillStyle = '#fff'; g.beginPath(); g.arc(128, 128, 120, 0, 7); g.fill(); g.lineWidth = 10; g.strokeStyle = '#111'; g.stroke();
       g.fillStyle = '#111'; for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2; g.fillRect(128 + Math.sin(a) * 98 - 4, 128 - Math.cos(a) * 98 - 4, 8, 8); }
-      g.font = 'bold 22px system-ui'; g.textAlign = 'center'; g.fillText('ZVONO', w / 2, 180);
+      g.font = 'bold 22px system-ui'; g.textAlign = 'center'; g.fillText('BELL', w / 2, 180);
     });
     const poster = makeCanvasTexture(256, 360, (g, w, h) => {
       g.fillStyle = '#7c3aed'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.font = `30px ${FONT}`; g.textAlign = 'center';
-      g.fillText('BUDI', w / 2, 70); g.fillText('KONKRETAN', w / 2, 112); g.font = 'bold 20px system-ui';
-      g.fillText('„Napiši nešto dobro“', w / 2, 200); g.fillText('nije prompt.', w / 2, 228); g.fillText('To je želja.', w / 2, 256);
+      g.fillText('BE', w / 2, 70); g.fillText('SPECIFIC', w / 2, 112); g.font = 'bold 20px system-ui';
+      g.fillText('"Write something good"', w / 2, 200); g.fillText('is not a prompt.', w / 2, 228); g.fillText('It is a wish.', w / 2, 256);
       g.fillStyle = '#facc15'; g.fillRect(40, 290, w - 80, 8);
     });
     const poster2 = makeCanvasTexture(256, 360, (g, w, h) => {
       g.fillStyle = '#0e7490'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.font = `30px ${FONT}`; g.textAlign = 'center';
       g.fillText('AI', w / 2, 70); g.fillText('ESCAPE', w / 2, 110); g.fillText('2026', w / 2, 150);
-      g.font = 'bold 20px system-ui'; g.fillText('Zaključani', w / 2, 220); g.fillText('sertifikat', w / 2, 248); g.fillText('Školska sezona', w / 2, 290);
+      g.font = 'bold 20px system-ui'; g.fillText('The Locked', w / 2, 220); g.fillText('Certificate', w / 2, 248); g.fillText('School season', w / 2, 290);
     });
     return { carpet, tiles, skyline, banner, whiteboard, vending, coffeeSign, exitSign, m2, m3, clock, poster, poster2 };
   }, []);
@@ -120,32 +120,32 @@ function PresentationScreen() {
     g.strokeStyle = 'rgba(255,255,255,0.06)'; for (let y = 0; y < h; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
     g.textAlign = 'center';
     if (doorOpen) {
-      g.fillStyle = '#4ade80'; g.font = `96px ${FONT}`; g.fillText('PROMPT PRIHVAĆEN', w / 2, 280);
-      g.fillStyle = '#fff'; g.font = `60px ${FONT}`; g.fillText('VRATA OTKLJUČANA', w / 2, 400);
-      g.font = 'bold 36px system-ui'; g.fillText('Napredak sertifikata: 33%', w / 2, 500);
+      g.fillStyle = '#4ade80'; g.font = `96px ${FONT}`; g.fillText('PROMPT ACCEPTED', w / 2, 280);
+      g.fillStyle = '#fff'; g.font = `60px ${FONT}`; g.fillText('DOOR UNLOCKED', w / 2, 400);
+      g.font = 'bold 36px system-ui'; g.fillText('Certificate progress: 33%', w / 2, 500);
       return;
     }
     if (!terminalOn) {
-      g.fillStyle = '#ef4444'; g.font = `96px ${FONT}`; g.fillText('SERTIFIKAT', w / 2, 200); g.fillText('ZAKLJUČAN', w / 2, 310);
-      g.fillStyle = '#fca5a5'; g.font = 'bold 40px system-ui'; g.fillText('PROMPTOTRON 3000 SPAVA', w / 2, 420);
-      g.fillStyle = '#fff'; g.font = 'bold 32px system-ui'; g.fillText('Probudi ga jasnim glasom na katedri', w / 2, 480);
+      g.fillStyle = '#ef4444'; g.font = `96px ${FONT}`; g.fillText('CERTIFICATE', w / 2, 200); g.fillText('LOCKED', w / 2, 310);
+      g.fillStyle = '#fca5a5'; g.font = 'bold 40px system-ui'; g.fillText('PROMPTOTRON 3000 IS ASLEEP', w / 2, 420);
+      g.fillStyle = '#fff'; g.font = 'bold 32px system-ui'; g.fillText('Wake it with a clear voice at the front desk', w / 2, 480);
     } else {
       g.fillStyle = '#22d3ee'; g.font = `70px ${FONT}`; g.fillText('PROMPTOTRON 3000', w / 2, 120);
-      g.fillStyle = '#fff'; g.font = 'bold 34px system-ui'; g.fillText('Dobar prompt ima 4 dijela:', w / 2, 190);
+      g.fillStyle = '#fff'; g.font = 'bold 34px system-ui'; g.fillText('A good prompt has 4 parts:', w / 2, 190);
     }
-    const slots = [['ULOGA', 'role', '#f472b6'], ['ZADATAK', 'task', '#60a5fa'], ['KONTEKST', 'context', '#34d399'], ['FORMAT', 'format', '#fbbf24']];
+    const slots = [['ROLE', 'role', '#f472b6'], ['TASK', 'task', '#60a5fa'], ['CONTEXT', 'context', '#34d399'], ['FORMAT', 'format', '#fbbf24']];
     slots.forEach(([label, id, col], i) => {
       const x = 160 + i * 320, y = terminalOn ? 250 : 540;
       const got = inventory.includes(id);
       g.fillStyle = got ? col : 'rgba(255,255,255,0.08)'; g.fillRect(x - 130, y, 260, 110);
       g.strokeStyle = col; g.lineWidth = 6; g.strokeRect(x - 130, y, 260, 110);
       g.fillStyle = got ? '#111' : col; g.font = `36px ${FONT}`; g.fillText(label, x, y + 55);
-      g.font = 'bold 26px system-ui'; g.fillText(got ? 'PRONAĐENO' : '???', x, y + 92);
+      g.font = 'bold 26px system-ui'; g.fillText(got ? 'FOUND' : '???', x, y + 92);
     });
     if (terminalOn) {
       g.font = 'bold 40px system-ui';
-      if (last && !last.success) { g.fillStyle = '#f87171'; g.font = `64px ${FONT}`; g.fillText(`ODBIJENO  (${last.score}%)`, w / 2, 500); g.font = 'bold 30px system-ui'; g.fillStyle = '#fff'; g.fillText(`Pokušaja: ${attempts}. Pomoć: pogledaj polja označena crvenom.`, w / 2, 570); }
-      else { g.fillStyle = '#fff'; g.fillText(`Pronađeno djelova: ${inventory.length}/4`, w / 2, 470); g.fillStyle = '#a5f3fc'; g.font = 'bold 30px system-ui'; g.fillText('Na terminalu na katedri složi i testiraj prompt', w / 2, 540); }
+      if (last && !last.success) { g.fillStyle = '#f87171'; g.font = `64px ${FONT}`; g.fillText(`REJECTED  (${last.score}%)`, w / 2, 500); g.font = 'bold 30px system-ui'; g.fillStyle = '#fff'; g.fillText(`Attempts: ${attempts}. Hint: check the boxes marked in red.`, w / 2, 570); }
+      else { g.fillStyle = '#fff'; g.fillText(`Parts found: ${inventory.length}/4`, w / 2, 470); g.fillStyle = '#a5f3fc'; g.font = 'bold 30px system-ui'; g.fillText('Build and test your prompt at the front desk terminal', w / 2, 540); }
     }
   }, [inventory, terminalOn, doorOpen, last, attempts, phase]);
   return <Panel w={7} h={3.94} p={[PROPS.screen.x + 0.05, 2.55, 0]} r={[0, Math.PI / 2, 0]} tex={tex} emissive={1} />;
@@ -153,14 +153,14 @@ function PresentationScreen() {
 
 // ---------------------------------------------------------------- desk with computer
 function Desk({ x, z, i }) {
-  const owner = ROSTER[i] || { name: 'Dežurni učenik', color: '#94a3b8' };
+  const owner = ROSTER[i] || { name: 'Class monitor', color: '#94a3b8' };
   const screen = useMemo(() => makeCanvasTexture(256, 160, (g, w, h) => {
     g.fillStyle = '#0f172a'; g.fillRect(0, 0, w, h); g.fillStyle = owner.color; g.fillRect(0, 0, w, 28);
     g.fillStyle = '#0f172a'; g.font = 'bold 18px system-ui'; g.fillText(owner.name.toUpperCase(), 10, 20);
     g.fillStyle = '#cbd5e1'; for (let k = 0; k < 6; k++) g.fillRect(12, 42 + k * 18, 60 + ((k * 53 + i * 31) % 160), 8);
   }), [i, owner]);
   const nameplate = useMemo(() => makeCanvasTexture(256, 64, (g, w, h) => {
-    g.fillStyle = owner.color; g.fillRect(0, 0, w, h); g.fillStyle = '#111'; g.font = `28px ${FONT}`; g.textAlign = 'center'; g.fillText(ROSTER[i] ? `${i + 1}  ${owner.name.toUpperCase()}` : 'DEŽURNI', w / 2, 44);
+    g.fillStyle = owner.color; g.fillRect(0, 0, w, h); g.fillStyle = '#111'; g.font = `28px ${FONT}`; g.textAlign = 'center'; g.fillText(ROSTER[i] ? `${i + 1}  ${owner.name.toUpperCase()}` : 'MONITOR', w / 2, 44);
   }), [i, owner]);
   const { w, d } = DESK_SIZE;
   return (
