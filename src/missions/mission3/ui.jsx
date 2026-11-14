@@ -116,11 +116,26 @@ export function LockdownOverlay() {
 }
 
 // ---------------------------------------------------------------- finale extras on the debrief
-// A general certificate any school can use: no teacher or school name is printed. The right-hand
-// line is left empty for a handwritten signature. The student's name lives only in component
+// No teacher or school name is printed. The right-hand line carries a drawn signature mark. The student's name lives only in component
 // state: it is never stored (no localStorage, no network) and is used for printing only.
 export const ORGANISER = 'JA Montenegro';
 export const SKILLS = ['Prompt writing', 'Fact-checking', 'Responsible AI use'];
+
+// A drawn, handwriting-style signature mark ("skerndl"). It is a stylised scribble, not a scan of
+// a real signature. Drawn as SVG so it looks the same on every computer and in print.
+const SIGNATURE_PATHS = [
+  'M 40 20 C 30 6 8 14 18 30 C 28 44 44 46 34 60 C 26 70 8 64 6 54',
+  'M 54 10 C 52 30 49 48 46 64',
+  'M 76 18 C 66 28 58 36 51 40 C 60 42 68 52 74 58 C 80 56 88 50 90 44 C 92 38 84 37 82 44 C 80 54 90 60 98 54 C 102 50 104 44 106 40 C 105 48 105 54 108 56 C 110 48 115 39 120 41 C 123 44 120 52 123 56 C 126 48 131 40 136 42 C 139 45 136 52 140 56 C 148 56 153 48 150 43 C 145 38 137 48 144 55 C 152 60 160 34 164 8 C 161 30 158 50 163 56 C 168 58 174 40 179 6 C 174 32 171 54 180 56 C 192 56 206 50 222 42',
+  'M 14 74 C 70 66 150 70 214 60',
+];
+function Signature() {
+  return (
+    <svg className="cert-signature" data-testid="cert-signature" viewBox="0 0 230 80" role="img" aria-label="skerndl" fill="none" stroke="#1e3a8a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      {SIGNATURE_PATHS.map((d) => <path key={d} d={d} />)}
+    </svg>
+  );
+}
 
 function Certificate({ name, date, testId }) {
   return (
@@ -136,7 +151,7 @@ function Certificate({ name, date, testId }) {
       <div className="cert-foot">
         <span className="cert-sign"><i />Date: {date}</span>
         <span className="seal">✦</span>
-        <span className="cert-sign"><i />Teacher's signature</span>
+        <span className="cert-sign"><Signature /><i />Teacher's signature</span>
       </div>
       <div className="cert-credit" data-testid="cert-credit">{PROJECT_CREDIT}</div>
     </div>

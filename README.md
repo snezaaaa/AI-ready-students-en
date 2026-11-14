@@ -100,7 +100,7 @@ Teaches **responsible AI use** and brings all three missions together.
 ## Certificate
 
 - Title **AI CERTIFICATE · Responsible AI Explorer**, a field for the student's full name, the three skills (Prompt writing · Fact-checking · Responsible AI use) and the date.
-- It is a **general certificate** any school can use: no teacher or school name is printed. There is an empty line for a handwritten teacher's signature. Programme organiser: **JA Montenegro**.
+- No teacher or school name is printed. The signature line carries a drawn, handwriting-style mark ("skerndl", a stylised scribble, not a scan of a real signature). Programme organiser: **JA Montenegro**.
 - It prints on **one A4 landscape page**.
 - **The name is not stored anywhere.** It exists only while the page is open and is used only for printing.
 
