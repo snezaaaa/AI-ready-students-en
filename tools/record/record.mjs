@@ -109,75 +109,85 @@ const SEGMENTS = {
     await shoot(9.5);
   },
 
+  // ---- Teaser 1: opens on the real "certificate locked" alarm, then gameplay from Mission 1
   async m1() {
-    await startMission('mission1');
+    await click('[data-testid=select-mission1]');
+    await click('[data-testid=start]');            // the cinematic intro with the announcement
+    await shoot(7.4);
+    await tap('Enter');                            // skip the rest of the intro
+    await shoot(0.75);
+    await G(() => window.__game.useGame.getState().clearDialogue());
     // GPT solves the whiteboard riddle
     await teleport(0, -5, 4.4, Math.PI);
     const t1 = tagger('MISSION 1 · THE IMPOSSIBLE PROMPT', 1.9);
-    await shoot(1.2, t1);
+    await shoot(1.0, t1);
     await hold(['KeyW'], 0.7, t1);
     await tag('', 0);
     await tap('KeyE');
-    await shoot(4.2);
-    // Gemi makes the printer laugh
-    await tap('Digit2');
-    await teleport(1, 9.5, -3.9, 0);
-    await shoot(0.8);
-    await hold(['KeyW'], 0.4);
-    await tap('KeyE');
-    await shoot(4.0);
+    await shoot(2.6);
+    // double jump onto a desk, then jump for the star above it
+    await G(() => { const g = window.__game.useGame.getState(); g.clearDialogue(); g.clearToast(); });
+    await teleport(0, 0.4, 0, Math.PI / 2);
+    await shoot(0.3);
+    await page.keyboard.down('KeyW');
+    await tap('Space'); await shoot(0.3);
+    await tap('Space'); await shoot(0.55);
+    await page.keyboard.up('KeyW');
+    await shoot(0.5);
+    await tap('Space'); await shoot(1.2);
     // build the prompt: fail, then succeed
     await G(() => { const g = window.__game.useGame.getState(); ['role', 'task', 'context', 'format'].forEach((k) => g.collect(k)); g.setFlag('terminalOn'); g.clearDialogue(); g.clearToast(); });
     await tap('Digit4');
     await teleport(3, -7.6, 0, Math.PI / 2);
     await shoot(0.5);
     await tap('KeyE');
-    await shoot(0.8);
-    for (const id of ['role_toaster', 'task_good', 'context_good', 'format_good']) { await click(`[data-testid=card-${id}]`); await shoot(0.35); }
+    await shoot(0.7);
+    for (const id of ['role_toaster', 'task_good', 'context_good', 'format_good']) { await click(`[data-testid=card-${id}]`); await shoot(0.3); }
     await click('[data-testid=test-prompt]');
-    await shoot(3.6);
+    await shoot(3.0);
     await click('[data-testid=card-role_good]');
     await shoot(0.4);
     await click('[data-testid=test-prompt]');
-    await shoot(5.8);   // success output, then the door cutscene starts
-    await shoot(4.0);
+    await shoot(5.6);   // success output, then the door cutscene starts
+    await shoot(3.2);
   },
 
+  // ---- Teaser 2: evidence, a Vacuum-Bot, and the one-evidence-per-claim fact-check
   async m2() {
     await startMission('mission2');
-    // Claude politely opens the sulking drinks cooler
+    // Claude opens the drinks cooler and finds the nutrition label
     await tap('Digit4');
     await teleport(3, 6.6, 5.0, -Math.PI / 2);
-    const t2 = tagger('MISSION 2 · THE VENDING MACHINE CRISIS', 1.45);
+    const t2 = tagger('MISSION 2 · THE VENDING MACHINE CRISIS', 1.6);
     await shoot(1.0, t2);
     await hold(['KeyW'], 0.45, t2);
     await tag('', 0);
     await tap('KeyE');
-    await shoot(5.0);
-    // a vacuum robot sends Gemi flying
-    await G(() => window.__game.useGame.getState().clearDialogue());
+    await shoot(3.0);
+    // a Vacuum-Bot sends Gemi flying
+    await G(() => { const g = window.__game.useGame.getState(); g.clearDialogue(); g.clearToast(); });
     await tap('Digit2');
     await G(() => Object.assign(window.__bots[1], { x: -1.5, z: 3.9, seg: 0, dir: 1, hitCooldown: 0 }));   // heading +x along z=3.9
     await teleport(1, 3.2, 3.9, Math.PI / 2);
     await hold(['KeyW'], 1.3);
-    await shoot(1.6);
-    // fact-check all five claims, step by step
-    await G(() => { const g = window.__game.useGame.getState(); ['textbook', 'label', 'teacher', 'cctv', 'health'].forEach((k) => g.collect(k)); g.clearDialogue(); g.clearToast(); });
+    await shoot(1.4);
+    // fact-check: read the one piece of evidence, mark TRUE or HALLUCINATION
+    await G(() => { const g = window.__game.useGame.getState(); ['textbook', 'label', 'teacher', 'cctv', 'health'].forEach((k) => g.collect(k)); g.clearDialogue(); g.clearToast(); window.__bots.forEach((b, i) => { b.x = -6.5; b.z = i ? 3.9 : -4.6; b.seg = 0; }); });
     await teleport(1, -3.0, 0, Math.PI / 2);
     await shoot(0.4);
     await tap('KeyE');
     await shoot(1.0);
-    const answers = [['c1', 'health', 'false'], ['c2', 'label', 'true'], ['c3', 'textbook', 'false'], ['c4', 'teacher', 'true'], ['c5', 'cctv', 'false']];
-    for (const [c, src, v] of answers) {
-      await click(`[data-testid=claim-tab-${c}]`); await shoot(0.3);
-      await click(`[data-testid=src-${c}-${src}]`); await shoot(0.45);
-      await click(`[data-testid=verdict-${c}-${v}]`); await shoot(0.45);
+    const answers = [['c1', 'false', 1.6], ['c2', 'true', 1.2], ['c3', 'false', 0.6], ['c4', 'true', 0.6], ['c5', 'false', 0.9]];
+    for (const [c, v, read] of answers) {
+      await click(`[data-testid=claim-tab-${c}]`); await shoot(read);
+      await click(`[data-testid=verdict-${c}-${v}]`); await shoot(0.5);
     }
     await click('[data-testid=submit-factcheck]');
-    await shoot(6.6);   // report types out, then SNACK-O-MAT 9000 is grounded
-    await shoot(4.0);
+    await shoot(6.4);   // report types out, then SNACK-O-MAT 9000 admits it was wrong
+    await shoot(3.6);
   },
 
+  // ---- Teaser 3: a dilemma, the sensor corridor, the final prompt, and the certificate
   async m3() {
     await startMission('mission3');
     // Copilot faces the Seal of Privacy
@@ -188,11 +198,11 @@ const SEGMENTS = {
     await hold(['KeyW'], 0.35, t3);
     await tag('', 0);
     await tap('KeyE');
-    await shoot(1.6);
+    await shoot(1.8);
     await click('[data-testid=opt-p_all]');
-    await shoot(2.2);
+    await shoot(2.0);
     await click('[data-testid=opt-p_anon]');
-    await shoot(2.6);
+    await shoot(2.2);
     await click('[data-testid=seal-continue]');
     // Claude runs the sensor corridor (driven by on-screen cues, like a player would)
     await G(() => { const g = window.__game.useGame.getState(); ['privacy', 'integrity', 'bias', 'oversight'].forEach((k) => g.collect(k)); g.clearDialogue(); g.clearToast(); g.patchMs({ corridorHint: true }); });
@@ -210,7 +220,7 @@ const SEGMENTS = {
         let go = true;
         defs.forEach((l, i) => {
           const st = window.__lasers[i];
-          if (l.type === 'gate') { const d = c.z - l.z; if (d > 0.95 && d < 1.3) { const dark = !st.on && !st.warn; clearSince = dark ? (clearSince ?? performance.now()) : null; if (!dark || performance.now() - clearSince < 200) go = false; } }
+          if (l.type === 'gate') { const d = c.z - l.z; if (d > 0.95 && d < 1.3) { const dark = !st.on && !st.warn; clearSince = dark ? (clearSince ?? performance.now()) : null; if (!dark || performance.now() - clearSince < 250) go = false; } }
           else { const d = c.z - l.zone[0]; if (d > 0 && d < 0.6 && c.grounded) { press('Space', true); press('Space', false); } }
         });
         if (go !== walking) { press('KeyW', go); walking = go; }
@@ -219,9 +229,9 @@ const SEGMENTS = {
       tick();
     });
     for (let k = 0; k < 14 * FPS && !(await G(() => window.__game.useGame.getState().ms.teamInCore)); k++) await frame();
-    await shoot(1.0);
+    await shoot(0.8);
     // Claude sends the FINAL PROMPT
-    await G(() => { const g = window.__game.useGame.getState(); g.clearDialogue(); g.patchMs({ consoleOn: true }); });
+    await G(() => { const g = window.__game.useGame.getState(); g.clearDialogue(); g.clearToast(); g.patchMs({ consoleOn: true }); });
     await tap('Digit4');
     await teleport(3, -4.2, -18.6, 0);
     await shoot(0.4);
@@ -229,9 +239,16 @@ const SEGMENTS = {
     await shoot(0.8);
     for (const id of ['f_role_good', 'f_task_good', 'f_ctx_good', 'f_fmt_good', 'f_guard_good']) { await click(`[data-testid=card-${id}]`); await shoot(0.3); }
     await click('[data-testid=test-prompt]');
-    await shoot(6.8);   // the class poster types out, then the archive opens
-    for (let k = 0; k < 4; k++) { await shoot(2.0); await tap('Enter'); }
-    await shoot(5.5);   // victory dance with certificates
+    await shoot(6.6);   // the class poster types out, then the archive opens
+    await shoot(2.6);   // archive cutscene
+    await tap('Enter');
+    await shoot(3.4);   // victory dance with the certificates
+    // ---- end on the debrief with an example certificate
+    for (let k = 0; k < 8 && (await G(() => window.__game.useGame.getState().phase)) !== 'complete'; k++) { await tap('Enter'); await shoot(0.3); }
+    await page.evaluate(() => { const i = document.querySelector('[data-testid=cert-name]'); const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set; set.call(i, 'Alex Example'); i.dispatchEvent(new Event('input', { bubbles: true })); });
+    await shoot(1.2);   // "MISSION 3 COMPLETE" at the top of the debrief
+    await page.evaluate(() => document.querySelector('[data-testid=certificate]').scrollIntoView({ block: 'center' }));
+    await shoot(4.5);   // the example certificate
   },
 
   async outro() {
